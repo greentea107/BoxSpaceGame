@@ -25,7 +25,7 @@ object MathUtils {
      * 对COS和SIN的结果进行缓存，如果某个角度已经计算过则直接取缓存，不用每次都计算
      * 缓存的KEY为保留两位小数的角度值，所以从缓存取值有精度不准的问题
      */
-    private val cosCach = LruCache<String, Double>(360)
+    private val cosCache = LruCache<String, Double>(360)
     private val sinCache = LruCache<String, Double>(360)
 
     /**
@@ -36,11 +36,11 @@ object MathUtils {
         val keyCache = String.format("%.2f", angle)
         return if (isCache) {
             // 有缓存取缓存，没缓存就计算后再缓存
-            if (cosCach[keyCache] != null)
-                cosCach[keyCache]
+            if (cosCache[keyCache] != null)
+                cosCache[keyCache]
             else {
                 val result = cos(Math.toRadians(angle))
-                cosCach.put(keyCache, result)
+                cosCache.put(keyCache, result)
                 result
             }
         } else {
@@ -82,7 +82,7 @@ object MathUtils {
     }
 
     /**
-     *
+     * 根据两个坐标获取角度
      * @param x1 纬度1
      * @param y1 经度1
      * @param x2 纬度2
@@ -90,10 +90,9 @@ object MathUtils {
      * @return
      */
     fun getAngle(x1: Float, y1: Float, x2: Float, y2: Float): Double {
-        var p1 = PointF(x1, y1);
-        var p2 = PointF(x2, y2);
-        var angle = atan2((p2.y - p1.y), (p2.x - p1.x))
-        var theta = angle * (180 / Math.PI)
-        return theta
+        val p1 = PointF(x1, y1)
+        val p2 = PointF(x2, y2)
+        val angle = atan2((p2.y - p1.y), (p2.x - p1.x))
+        return angle * (180 / Math.PI)
     }
 }
