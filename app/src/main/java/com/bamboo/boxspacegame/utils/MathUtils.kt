@@ -92,8 +92,8 @@ object MathUtils {
     fun getAngle(x1: Float, y1: Float, x2: Float, y2: Float): Double {
         var p1 = PointF(x1, y1);
         var p2 = PointF(x2, y2);
-        var angle = atan2((p2.y - p1.y), (p2.x - p1.x))  //弧度  0.6435011087932844
-        var theta = angle * (180 / Math.PI);  //角度  36.86989764584402
+        var angle = atan2((p2.y - p1.y), (p2.x - p1.x))
+        var theta = angle * (180 / Math.PI)
         return theta
     }
 }
