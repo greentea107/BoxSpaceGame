@@ -7,9 +7,6 @@ import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 
-/**
- * 子弹类
- */
 class Bullet : BaseSprite() {
     private var size: Float = 0f
 

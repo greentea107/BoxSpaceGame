@@ -7,9 +7,9 @@ import com.bamboo.boxspacegame.AppGobal
  * 瞬移的特效
  */
 class FlashEffect : BaseEffect() {
-    private var isInvert: Boolean = false
+    private var isInvert: Boolean = false // 判断动画是正序播放还是倒序播放
     private var currentFrame = 0
-    private var onFinished: (() -> Unit)? = null
+    private var onFinished: (() -> Unit)? = null // 动画播放完毕后响应
 
     companion object {
         private const val FRAME_COUNT = 30

@@ -36,6 +36,9 @@ class BulletEffect : BaseEffect() {
         }
     }
 
+    /**
+     * 根据当前帧的编号绘制动画
+     */
     override fun draw(canvas: Canvas) {
         val bmp = AppGobal.bmpCache["bulletEffect_$currentFrame"]
         val ex = x - AppGobal.unitSize / 2
@@ -48,6 +51,9 @@ class BulletEffect : BaseEffect() {
         }
     }
 
+    /**
+     * 播放动画并设置动画播放的坐标
+     */
     fun play(x: Float, y: Float) {
         free = false
         this.x = x
