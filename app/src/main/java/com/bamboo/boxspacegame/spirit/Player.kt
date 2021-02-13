@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-object Player : BaseSpirit() {
+object Player : BaseSprite() {
     private var lockAngle = 0f // 移动时锁定的角度
     private var isMove = false
     private var isLockAngle = false

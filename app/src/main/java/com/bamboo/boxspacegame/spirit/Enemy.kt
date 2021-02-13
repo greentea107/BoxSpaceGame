@@ -8,7 +8,7 @@ import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 
-class Enemy : BaseSpirit() {
+class Enemy : BaseSprite() {
     private var bmp: Bitmap? = null
     private val paint = Paint()
 

@@ -1,7 +1,6 @@
 package com.bamboo.boxspacegame.spirit
 
 import android.graphics.*
-import android.media.effect.EffectContext
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
@@ -11,7 +10,7 @@ import com.jeremyliao.liveeventbus.LiveEventBus
 /**
  * 子弹类
  */
-class Bullet : BaseSpirit() {
+class Bullet : BaseSprite() {
     private var size: Float = 0f
 
     companion object {
