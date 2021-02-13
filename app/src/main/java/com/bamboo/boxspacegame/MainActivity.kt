@@ -242,7 +242,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 ) {
                     launch(Dispatchers.IO) {
                         BulletManager.init(this@MainActivity)
-                        Player.init(this@MainActivity)
+                        Player.initScope(this@MainActivity)
                         StageManager.init(this@MainActivity)
                         while (true) {
                             val canvas = holder.lockCanvas()

@@ -21,15 +21,19 @@ object Player : BaseSprite() {
     var size = SizeF(0f, 0f) // 玩家的尺寸
     var isShow = true
 
-    fun init(scope: CoroutineScope) {
+    init {
         this.distance = 3f // 玩家的移动距离
         // 设置精灵的尺寸为SurfaceView的1/20
         this.size = SizeF(AppGobal.screenWidth / 20f, AppGobal.screenWidth / 20f)
-        this.angle = 270f
+        this.angle = 270f // 初始化玩家的角度为12点钟方向
         // 初始位置为屏幕居中
         this.x = (AppGobal.screenWidth - size.width) / 2
         this.y = (AppGobal.screenHeight - size.height) / 2
         buildBmp() // 绘制玩家的图形
+    }
+
+    fun initScope(scope: CoroutineScope) {
+        // 由于玩家的移动是连续的，所以需要通过循环来实现
         scope.launch(Dispatchers.IO) {
             while (true) {
                 if (AppGobal.pause) continue
@@ -39,6 +43,7 @@ object Player : BaseSprite() {
                 delay(5)
             }
         }
+        // 由于子弹是连续发射的，所以需要一个循环来处理，每次循环时根据isAttack判断是否需要发射
         scope.launch(Dispatchers.IO) {
             while (true) {
                 if (AppGobal.pause) continue
@@ -53,7 +58,7 @@ object Player : BaseSprite() {
     }
 
     /**
-     * 绘制玩家精灵的BITMAP并缓存
+     * 将玩家的图像绘制到Bitmap上并缓存
      */
     private fun buildBmp() {
         val bmp = Bitmap.createBitmap(
@@ -61,6 +66,7 @@ object Player : BaseSprite() {
             size.height.toInt(),
             Bitmap.Config.ARGB_8888
         )
+        // 手绘玩家的图像
         Canvas(bmp).apply {
             val paint = Paint()
             paint.color = Color.WHITE
@@ -87,6 +93,9 @@ object Player : BaseSprite() {
         AppGobal.bmpCache.put(AppGobal.BMP_PLAYER, bmp)
     }
 
+    /**
+     * 从缓存中取出玩家的Bitmap并绘制在屏幕上
+     */
     override fun draw(canvas: Canvas) {
         val bmp = AppGobal.bmpCache[AppGobal.BMP_PLAYER]
         bmp?.let {
@@ -156,14 +165,23 @@ object Player : BaseSprite() {
         angle = lockAngle
     }
 
+    /**
+     * 发射子弹
+     */
     fun sendBullet(isAttack: Boolean) {
         Player.isAttack = isAttack
     }
 
+    /**
+     * 瞬移
+     * 步骤1：隐藏玩家图像
+     * 步骤2：播放瞬移动画并在结束后计算玩家瞬移后的坐标
+     * 步骤3：再次播放动画并在结束后显示玩家
+     */
     fun jump() {
         if (AppGobal.pause) return
         isShow = false
-        // 通过事件机制播放音效
+        // 播放音效
         LiveEventBus.get(AppGobal.EVENT_FLASH_SFX).post(true)
         // 播放瞬移动画，在动画结束时移动玩家的坐标
         EffectManager.obtainFlash().play(x, y) {
@@ -177,5 +195,8 @@ object Player : BaseSprite() {
         }
     }
 
-    fun getRect() = RectF(x, y, x + AppGobal.unitSize, y + AppGobal.unitSize)
+    /**
+     * 获取玩家在屏幕上的矩形
+     */
+    fun getRect() = RectF(x, y, x + size.width, y + size.height)
 }
