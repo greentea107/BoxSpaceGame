@@ -137,7 +137,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                mediaPlayer.start()
+                if (btnBGM.text == "音乐：开")
+                    mediaPlayer.start()
             }
         })
     }

@@ -98,6 +98,7 @@ object Player : BaseSprite() {
      */
     override fun draw(canvas: Canvas) {
         val bmp = AppGobal.bmpCache[AppGobal.BMP_PLAYER]
+        if (bmp == null || bmp.width == 0) buildBmp()
         bmp?.let {
             canvas.withRotation(
                 (if (!isLockAngle) angle else lockAngle) + 90,

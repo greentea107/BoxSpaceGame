@@ -9,19 +9,20 @@ import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 
 class Enemy : BaseSprite() {
-    private var bmp: Bitmap? = null
+    private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
 
     init {
         this.distance = 3f
         this.HP = 10f
-        bmp = AppGobal.bmpCache[AppGobal.BMP_ENEMY]
-        if (bmp == null) {
-            bmp = buildBmp()
-        }
+        bmpEnemy = AppGobal.bmpCache[AppGobal.BMP_ENEMY]
+        if (bmpEnemy == null) buildBmp()
     }
 
-    private fun buildBmp(): Bitmap {
+    /**
+     * 绘制敌人的图像到Bitmap并缓存
+     */
+    private fun buildBmp() {
         val bmp = Bitmap.createBitmap(
             AppGobal.unitSize.toInt(),
             AppGobal.unitSize.toInt(),
@@ -42,15 +43,30 @@ class Enemy : BaseSprite() {
             path.close()
             paint.style = Paint.Style.FILL_AND_STROKE
             paint.shader = RadialGradient(
-                AppGobal.unitSize / 2f, 0f, AppGobal.unitSize,
-                intArrayOf(Color.WHITE, Color.DKGRAY), null, Shader.TileMode.CLAMP
+                AppGobal.unitSize / 2f,
+                0f,
+                AppGobal.unitSize,
+                intArrayOf(
+                    Color.rgb(78, 136, 55),
+                    Color.rgb(44, 72, 49)
+                ),
+                null,
+                Shader.TileMode.CLAMP
             )
             this.drawPath(path, paint)
             paint.style = Paint.Style.STROKE
-            paint.shader = null
+            paint.shader = RadialGradient(
+                AppGobal.unitSize / 2f,
+                0f,
+                AppGobal.unitSize,
+                intArrayOf(
+                    Color.rgb(235, 245, 235),
+                    Color.rgb(78, 136, 55)
+                ),
+                null,
+                Shader.TileMode.CLAMP
+            )
             paint.strokeWidth = 1f
-            paint.color = Color.WHITE
-            this.drawPath(path, paint)
             this.drawLine(
                 AppGobal.unitSize / 2,
                 0f,
@@ -58,11 +74,17 @@ class Enemy : BaseSprite() {
                 AppGobal.unitSize,
                 paint
             )
+            paint.shader = null
+            paint.color = Color.WHITE
+            this.drawPath(path, paint)
         }
         AppGobal.bmpCache.put(AppGobal.BMP_ENEMY, bmp)
-        return bmp
+        this.bmpEnemy = bmp
     }
 
+    /**
+     * 计算移动后的坐标
+     */
     override fun move() {
         angle = setAngleByCoord(Player.x, Player.y)
         val pt = MathUtils.getCoordsByAngle(distance, angle.toDouble(), PointF(x, y))
@@ -70,8 +92,11 @@ class Enemy : BaseSprite() {
         y = pt.y
     }
 
+    /**
+     * 绘制敌人的图像到屏幕
+     */
     override fun draw(canvas: Canvas) {
-        bmp?.let {
+        bmpEnemy?.let {
             canvas.withRotation(
                 angle + 90,
                 x + AppGobal.unitSize / 2,
@@ -83,12 +108,15 @@ class Enemy : BaseSprite() {
         }
     }
 
+    /**
+     * 绘制圆形光晕
+     */
     private fun drawMotion(canvas: Canvas) {
-        paint.color = Color.parseColor("#91C8EB")
+        paint.color = Color.WHITE
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.strokeWidth = 1f
-        val cz2 = System.currentTimeMillis() % 12
-        paint.maskFilter = BlurMaskFilter(5f + cz2, BlurMaskFilter.Blur.OUTER)
+        paint.strokeWidth = 2f
+        val cz2 = System.currentTimeMillis() % 15
+        paint.maskFilter = BlurMaskFilter(15f + cz2, BlurMaskFilter.Blur.OUTER)
         canvas.drawCircle(
             x + AppGobal.unitSize / 2, y + AppGobal.unitSize / 2,
             AppGobal.unitSize / 2.5f, paint
@@ -98,6 +126,12 @@ class Enemy : BaseSprite() {
         paint.strokeWidth = 1f
         canvas.drawCircle(
             x + AppGobal.unitSize / 2, y + AppGobal.unitSize / 2,
+            AppGobal.unitSize / 2.5f, paint
+        )
+        paint.color = Color.rgb(83, 124, 255)
+        paint.strokeWidth = 1f
+        canvas.drawCircle(
+            x + AppGobal.unitSize / 4, y + AppGobal.unitSize / 4,
             AppGobal.unitSize / 2.5f, paint
         )
     }
@@ -111,11 +145,18 @@ class Enemy : BaseSprite() {
 
     fun getRect() = RectF(x, y, x + AppGobal.unitSize, y + AppGobal.unitSize)
 
+    /**
+     * 处理敌人被子弹击中的流程
+     */
     fun hit() {
         if (this.HP <= 0) {
+            // 当敌人的血量清零的处理步骤
+            // 将当前类设为空闲，以便于下次使用
+            // 根据当前坐标播放爆炸效果
+            // 通过事件总线更新分数和播放音效
             this.free = true
-            val cx = bmp?.width?.div(2) ?: 0
-            val cy = bmp?.height?.div(2) ?: 0
+            val cx = bmpEnemy?.width?.div(2) ?: 0
+            val cy = bmpEnemy?.height?.div(2) ?: 0
             EffectManager.obtainBomb().play(x + cx, y + cy)
             StageManager.score++
             LiveEventBus.get(AppGobal.EVENT_SCORE).post(StageManager.score)
