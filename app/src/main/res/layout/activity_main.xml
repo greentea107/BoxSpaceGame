@@ -185,25 +185,33 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnBGM"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_single_color"
-            android:checked="true"
-            android:gravity="center"
-            android:text="音乐：关"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnSFX"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@drawable/btn_single_color"
-            android:text="音效：开"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <Button
+                android:id="@+id/btnBGM"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:checked="true"
+                android:gravity="center"
+                android:text="音乐：开"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnSFX"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:text="音效：开"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -69,8 +69,8 @@ object MapBackground {
         canvas.drawRect(r, paint) // 背景黑
 
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.color = Color.rgb(80,120,236)
-        paint.maskFilter = BlurMaskFilter(AppGobal.unitSize, BlurMaskFilter.Blur.OUTER)
+        paint.color = Color.rgb(80, 120, 236)
+        paint.maskFilter = BlurMaskFilter(AppGobal.unitSize / 2, BlurMaskFilter.Blur.OUTER)
         val rin = RectF(
             AppGobal.unitSize,
             AppGobal.unitSize,
