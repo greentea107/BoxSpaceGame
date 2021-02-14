@@ -194,14 +194,17 @@
                 android:id="@+id/btnBGM"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_single_color"
                 android:checked="true"
                 android:gravity="center"
                 android:text="音乐：开"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
 
             <Button
                 android:id="@+id/btnSFX"
@@ -211,7 +214,7 @@
                 android:background="@drawable/btn_single_color"
                 android:text="音效：开"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
