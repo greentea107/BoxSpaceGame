@@ -9,7 +9,7 @@ class BombEffect : BaseEffect() {
     private var onFinished: (() -> Unit)? = null
 
     companion object {
-        const val FRAME_COUNT = 10
+        const val FRAME_COUNT = 20
     }
 
     fun play(x: Float, y: Float, onFinished: (() -> Unit)? = null) {
@@ -22,15 +22,17 @@ class BombEffect : BaseEffect() {
 
     override fun draw(canvas: Canvas) {
         paint.color = Color.WHITE
-        paint.style = Paint.Style.FILL
-        paint.alpha = 255 / currentFrame
+        paint.strokeWidth = 2f
+        val inc = AppGobal.unitSize / FRAME_COUNT
         currentFrame++
         if (currentFrame > FRAME_COUNT) {
             currentFrame = 1
             free = true
             onFinished?.let { it() }
         } else {
-            canvas.drawCircle(x, y, AppGobal.unitSize, paint)
+            paint.style = if (currentFrame >= FRAME_COUNT / 2) Paint.Style.STROKE
+            else Paint.Style.FILL
+            canvas.drawCircle(x, y, inc * currentFrame, paint)
         }
     }
 }
