@@ -1,16 +1,14 @@
 package com.bamboo.boxspacegame.effect
 
 import android.graphics.Canvas
-import com.bamboo.boxspacegame.effect.BaseEffect
-import com.bamboo.boxspacegame.effect.BombEffect
-import com.bamboo.boxspacegame.effect.BulletEffect
-import com.bamboo.boxspacegame.effect.FlashEffect
-import java.lang.Exception
-import java.util.concurrent.CopyOnWriteArrayList
 
+/**
+ * 特效管理类
+ */
 object EffectManager {
-    private val listEffect = CopyOnWriteArrayList<BaseEffect>()
+    private val listEffect = mutableListOf<BaseEffect>()
 
+    @Synchronized
     private inline fun <reified T : BaseEffect> obtain(t: T): BaseEffect {
         val effect = listEffect.find {
             it.free && (it is T)
@@ -33,11 +31,12 @@ object EffectManager {
     fun draw(canvas: Canvas) {
         try {
             listEffect.filter { !it.free }.forEach { it.draw(canvas) }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
+    @Synchronized
     fun release() {
         listEffect.clear()
     }

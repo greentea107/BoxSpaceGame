@@ -4,12 +4,13 @@ import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
 
 /**
- * 瞬移的特效
+ * 瞬移的动画特效
+ * 动画可以正序或倒序播放
  */
 class FlashEffect : BaseEffect() {
     private var isInvert: Boolean = false // 判断动画是正序播放还是倒序播放
     private var currentFrame = 0
-    private var onFinished: (() -> Unit)? = null // 动画播放完毕后响应
+    private var onFinished: (() -> Unit)? = null // 动画播放完毕后的回调函数
 
     companion object {
         private const val FRAME_COUNT = 30
