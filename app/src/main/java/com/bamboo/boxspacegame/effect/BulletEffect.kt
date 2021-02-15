@@ -10,7 +10,11 @@ class BulletEffect : BaseEffect() {
     private var currentFrame = 0
 
     companion object {
-        private const val FRAME_COUNT = 15
+        private const val FRAME_COUNT = 15 // 动画的总帧数
+
+        /**
+         * 初始化弹痕的Bitmap并缓存
+         */
         fun init() {
             val paint = Paint()
             paint.color = Color.WHITE
