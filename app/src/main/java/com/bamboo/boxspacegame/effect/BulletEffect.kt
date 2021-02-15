@@ -3,6 +3,7 @@ package com.bamboo.boxspacegame.effect
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.utils.LogEx
+import kotlin.random.Random
 
 /**
  * 子弹击中物体时的特效
@@ -27,14 +28,14 @@ class BulletEffect : BaseEffect() {
                     Bitmap.Config.ARGB_8888
                 )
                 Canvas(bmp).apply {
-                    val unit = AppGobal.unitSize / 3f
+                    val unit = AppGobal.unitSize / 2f
                     paint.alpha = 255 - (255 / FRAME_COUNT * it)
                     paint.shader = RadialGradient(
                         unit, unit, unit + 0.1f,
                         intArrayOf(Color.WHITE, Color.TRANSPARENT), null,
                         Shader.TileMode.CLAMP
                     )
-                    this.drawCircle(unit, unit, unit, paint)
+                    this.drawCircle(unit, unit, AppGobal.unitSize / 4f, paint)
                 }
                 AppGobal.bmpCache.put("bulletEffect_$it", bmp)
             }

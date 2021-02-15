@@ -51,6 +51,7 @@ class Bullet : BaseSprite() {
             }
             ?.let {
                 // 如果击中敌人则将子弹设为空闲并播放子弹特效
+                free = true
                 EffectManager.obtainBullet().play(x, y)
                 it.hit()
                 return
