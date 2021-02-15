@@ -248,9 +248,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         while (true) {
                             val canvas = holder.lockCanvas()
                             MapBackground.draw(canvas)
+                            StageManager.draw(canvas)
                             BulletManager.draw(canvas)
                             EffectManager.draw(canvas)
-                            StageManager.draw(canvas)
                             Player.draw(canvas)
                             holder.unlockCanvasAndPost(canvas)
                         }

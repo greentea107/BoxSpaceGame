@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/bg_main"
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
@@ -15,35 +15,42 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:shadowColor="@android:color/holo_blue_light"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="3"
+            android:text="Space Battle"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold|italic" />
 
-            <ImageButton
-                android:id="@+id/ibtnBack"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/btn_single_color"
-                android:src="@drawable/baseline_arrow_back_white_24dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/cyan_line" />
 
-            <Button
-                android:id="@+id/btnPause"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_single_color"
-                android:text="暂停"
-                android:textColor="@color/white" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_single_color"
+            android:text="重新开始"
+            android:textColor="@color/white" />
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:stretchColumns="1">
 
             <TableRow>
@@ -68,7 +75,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/white" />
+                android:background="@color/cyan_line" />
 
             <TableRow>
 
@@ -92,7 +99,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/white" />
+                android:background="@color/cyan_line" />
         </TableLayout>
 
         <FrameLayout
@@ -111,14 +118,10 @@
                 app:showHotSport="true" />
         </FrameLayout>
 
-        <Button
-            android:id="@+id/btnReset"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_single_color"
-            android:text="重置游戏"
-            android:textColor="@color/white" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <SurfaceView
@@ -136,26 +139,29 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:shadowColor="@android:color/holo_blue_light"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="3"
-            android:text="Space Battle"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold|italic" />
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/white" />
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:text="暂停"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/ibtnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/btn_single_color"
+                android:src="@drawable/baseline_clear_white_24dp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

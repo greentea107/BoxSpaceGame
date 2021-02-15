@@ -16,7 +16,7 @@ class Bullet : BaseSprite() {
 
     init {
         this.distance = 7f
-        this.size = Player.size.width / 5
+        this.size = Player.size.width / 2
         val bmp = AppGobal.bmpCache["bullet"]
         if (bmp == null) buildBitmap()
     }
@@ -25,12 +25,16 @@ class Bullet : BaseSprite() {
         val bmp = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         Canvas(bmp).apply {
             val paint = Paint()
-            paint.color = Color.YELLOW
             paint.style = Paint.Style.FILL
-            this.drawCircle(size / 2, size / 2, size / 2, paint)
-            paint.color = Color.WHITE
-            paint.style = Paint.Style.STROKE
-            paint.strokeWidth = 1f
+            paint.shader = RadialGradient(
+                size / 2, size / 2, size / 4, intArrayOf(
+                    Color.WHITE,
+                    Color.parseColor("#FFEFA2"),
+                    Color.parseColor("#56FFFFFF")
+                ),
+                floatArrayOf(0.1f, 0.5f, 0.8f),
+                Shader.TileMode.CLAMP
+            )
             this.drawCircle(size / 2, size / 2, size / 2, paint)
         }
         AppGobal.bmpCache.put("bullet", bmp)
