@@ -58,6 +58,9 @@ object StageManager {
         stage?.drawAllEnemy(canvas)
     }
 
+    /**
+     * 重新开始游戏
+     */
     fun reset() {
         currentStageNo = 1
         enemyCount = 5

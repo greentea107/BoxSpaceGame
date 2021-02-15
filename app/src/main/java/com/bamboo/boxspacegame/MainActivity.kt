@@ -75,6 +75,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    /**
+     * 重新开始
+     */
     private fun initResetButton() {
         btnReset.setOnClickListener {
             AppGobal.pause = false
