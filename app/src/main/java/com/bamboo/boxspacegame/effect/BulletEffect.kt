@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.utils.LogEx
 
 /**
  * 子弹击中物体时的特效
@@ -26,7 +27,7 @@ class BulletEffect : BaseEffect() {
                     Bitmap.Config.ARGB_8888
                 )
                 Canvas(bmp).apply {
-                    val unit = AppGobal.unitSize / 2f
+                    val unit = AppGobal.unitSize / 3f
                     paint.alpha = 255 - (255 / FRAME_COUNT * it)
                     paint.shader = RadialGradient(
                         unit, unit, unit + 0.1f,
