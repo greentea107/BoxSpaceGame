@@ -20,14 +20,18 @@ class Stage {
     private val listEnemy = mutableListOf<Enemy>()
     private var gameStatus = READY
 
+    /**
+     * 关卡状态
+     */
     companion object Status {
-        const val READY = 0
-        const val PLAYING = 1
-        const val MISSION_FAILED = 2
-        const val MISSION_COMPLETED = 3
+        const val READY = 0 // 准备阶段
+        const val PLAYING = 1 // 进行中
+        const val MISSION_FAILED = 2 // 失败
+        const val MISSION_COMPLETED = 3 // 过关
     }
 
     fun actionMotion() {
+        // 遍历关卡中的全部敌方
         listEnemy.filter { !it.free }.forEach {
             it.move()
             // 判断敌人是否和玩家碰撞
@@ -40,12 +44,16 @@ class Stage {
                 }
             }
         }
-        // 判断敌人是否全部消灭
+        // 判断敌方是否全部消灭
         if (listEnemy.count { it.free && it.HP <= 0 } == listEnemy.size) {
             gameStatus = MISSION_COMPLETED
         }
     }
 
+    /**
+     * 设置玩家的登场点和关卡中的敌人总数及敌人的HP值
+     */
+    @Synchronized
     suspend fun setPlayerAndEnemy(enemyCount: Int, enemyHP: Float) {
         this.enemyCount = enemyCount
         this.enemyHp = enemyHP

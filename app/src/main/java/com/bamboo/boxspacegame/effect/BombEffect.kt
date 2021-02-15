@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.utils.LogEx
 
 /**
  * 爆炸动画特效
@@ -40,8 +41,13 @@ class BombEffect : BaseEffect() {
             free = true
             onFinished?.let { it() }
         } else {
-            paint.style = if (currentFrame >= FRAME_COUNT / 2) Paint.Style.STROKE
-            else Paint.Style.FILL
+            if (currentFrame >= FRAME_COUNT / 2) {
+                paint.style = Paint.Style.STROKE
+                paint.alpha = 255
+            } else {
+                paint.style = Paint.Style.FILL
+                paint.alpha = 255 - (255 / FRAME_COUNT * 2 * currentFrame)
+            }
             canvas.drawCircle(x, y, inc * currentFrame, paint)
         }
     }
