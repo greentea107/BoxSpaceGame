@@ -16,7 +16,7 @@ import kotlin.random.Random
  */
 class Stage {
     private var enemyCount: Int = 0
-    private var enemyHp: Float = 10f
+    private var enemyHp: Float = 8f
     private val listEnemy = mutableListOf<Enemy>()
     private var gameStatus = READY
 

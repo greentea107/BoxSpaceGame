@@ -187,7 +187,7 @@ object Player : BaseSprite() {
         // 播放瞬移动画，在动画结束时移动玩家的坐标
         EffectManager.obtainFlash().play(x, y) {
             val bakDistance = distance
-            distance = size.width * 2
+            distance = size.width * 3
             move()
             distance = bakDistance
             EffectManager.obtainFlash().play(x, y, true) {

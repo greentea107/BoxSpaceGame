@@ -162,7 +162,7 @@ class Enemy : BaseSprite() {
             LiveEventBus.get(AppGobal.EVENT_SCORE).post(StageManager.score)
             LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
         } else {
-            this.HP -= 2f
+            this.HP -= 5f
         }
     }
 }
