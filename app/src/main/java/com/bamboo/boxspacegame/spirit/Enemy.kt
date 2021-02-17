@@ -86,6 +86,7 @@ class Enemy : BaseSprite() {
     /**
      * 计算移动后的坐标
      */
+    @Synchronized
     override fun move() {
         angle = setAngleByCoord(Player.x, Player.y)
         val pt = MathUtils.getCoordsByAngle(distance, angle.toDouble(), PointF(x, y))
@@ -113,26 +114,18 @@ class Enemy : BaseSprite() {
      * 绘制圆形光晕
      */
     private fun drawMotion(canvas: Canvas) {
-        paint.color = Color.WHITE
+        paint.color = Color.parseColor("#4F78F1")
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.strokeWidth = 2f
-        val cz2 = System.currentTimeMillis() % 15
-        paint.maskFilter = BlurMaskFilter(15f + cz2, BlurMaskFilter.Blur.OUTER)
+        paint.strokeWidth = 1f
+        paint.maskFilter = BlurMaskFilter(25f, BlurMaskFilter.Blur.OUTER)
         canvas.drawCircle(
             x + AppGobal.unitSize / 2, y + AppGobal.unitSize / 2,
             AppGobal.unitSize / 2.5f, paint
         )
         paint.color = Color.WHITE
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 1f
+        paint.strokeWidth = 2f
         canvas.drawCircle(
             x + AppGobal.unitSize / 2, y + AppGobal.unitSize / 2,
-            AppGobal.unitSize / 2.5f, paint
-        )
-        paint.color = Color.rgb(83, 124, 255)
-        paint.strokeWidth = 1f
-        canvas.drawCircle(
-            x + AppGobal.unitSize / 4, y + AppGobal.unitSize / 4,
             AppGobal.unitSize / 2.5f, paint
         )
     }
