@@ -37,7 +37,7 @@ object StageManager {
                         currentStageNo++
                         enemyCount++
                         enemyHP += 5f
-                        BulletManager.damage += 3f
+                        BulletManager.damage += 2f
                         stage?.setPlayerAndEnemy(enemyCount, enemyHP)
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
                         LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
