@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 object BulletManager {
     private val listBullet = mutableListOf<Bullet>()
-    var damage: Float = 2f
+    var damage: Float = 3f
 
     fun init(scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {

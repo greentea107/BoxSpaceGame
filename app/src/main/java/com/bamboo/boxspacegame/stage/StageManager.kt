@@ -34,10 +34,10 @@ object StageManager {
                     Stage.MISSION_COMPLETED -> { // 通关成功
                         EffectManager.release()
                         BulletManager.release()
+                        BulletManager.damage += 2f
                         currentStageNo++
                         enemyCount++
                         enemyHP += 5f
-                        BulletManager.damage += 2f
                         stage?.setPlayerAndEnemy(enemyCount, enemyHP)
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
                         LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
