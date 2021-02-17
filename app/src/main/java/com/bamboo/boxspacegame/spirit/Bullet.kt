@@ -54,7 +54,7 @@ class Bullet : BaseSprite() {
                 // 如果击中敌人则将子弹设为空闲并播放子弹特效
                 free = true
                 EffectManager.obtainBullet().play(x, y)
-                it.hit()
+                it.hit(x,y)
                 return
             }
         // 判断子弹是否越界，越界就释放
