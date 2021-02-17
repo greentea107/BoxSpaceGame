@@ -149,7 +149,7 @@ class Enemy : BaseSprite() {
     /**
      * 处理敌人被子弹击中的流程
      */
-    fun hit(bulletX: Float, bulletY: Float) {
+    fun hit(bullet: Bullet) {
         if (this.HP <= 0) {
             // 当敌人的血量清零的处理步骤
             // 将当前类设为空闲，以便于下次使用
@@ -163,10 +163,10 @@ class Enemy : BaseSprite() {
             LiveEventBus.get(AppGobal.EVENT_SCORE).post(StageManager.score)
             LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
         } else {
-            this.HP -= 5f
+            this.HP -= bullet.damage
             // 敌机被击中时再随机的往某个角度发射子弹，在视觉上作出子弹反弹的效果
             val randomAngle = Random(System.currentTimeMillis()).nextInt(360).toFloat()
-            BulletManager.obtain().send(bulletX, bulletY, randomAngle)
+            BulletManager.send(bullet.x, bullet.y, randomAngle)
         }
     }
 }

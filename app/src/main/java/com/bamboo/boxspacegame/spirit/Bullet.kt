@@ -10,6 +10,10 @@ import kotlin.random.Random
 
 class Bullet : BaseSprite() {
     private var size: Float = 0f
+    var damage: Float = 2f // 伤害值
+        set(value) {
+            field = if (value <= 0f) 2f else value
+        }
 
     companion object {
         const val INTERVAL = 150L // 子弹的间隔
@@ -41,6 +45,7 @@ class Bullet : BaseSprite() {
         AppGobal.bmpCache.put("bullet", bmp)
     }
 
+    @Synchronized
     override fun move() {
         val pt = MathUtils.getCoordsByAngle(distance, angle.toDouble(), PointF(x, y))
         x = pt.x
@@ -54,7 +59,7 @@ class Bullet : BaseSprite() {
                 // 如果击中敌人则将子弹设为空闲并播放子弹特效
                 free = true
                 EffectManager.obtainBullet().play(x, y)
-                it.hit(x,y)
+                it.hit(this)
                 return
             }
         // 判断子弹是否越界，越界就释放
@@ -85,11 +90,12 @@ class Bullet : BaseSprite() {
         canvas.drawBitmap(bmp, x - size / 2, y - size / 2, null)
     }
 
-    fun send(x: Float, y: Float, angle: Float) {
+    fun send(x: Float, y: Float, angle: Float, damage: Float) {
         this.free = false
         this.x = x
         this.y = y
         this.angle = angle
+        this.damage = damage
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
     }
 }

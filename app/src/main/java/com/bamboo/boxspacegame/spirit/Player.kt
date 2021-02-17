@@ -48,9 +48,7 @@ object Player : BaseSprite() {
             while (true) {
                 if (AppGobal.pause) continue
                 if (isAttack) {
-                    BulletManager
-                        .obtain()
-                        .send(size.width / 2 + x, size.height / 2 + y, lockAngle)
+                    BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)
                 }
                 delay(Bullet.INTERVAL) // 发射子弹的间隔
             }

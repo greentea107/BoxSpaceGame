@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.spirit
 
 import android.graphics.Canvas
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.utils.LogEx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -9,7 +10,8 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
 object BulletManager {
-    private val listBullet = CopyOnWriteArrayList<Bullet>()
+    private val listBullet = mutableListOf<Bullet>()
+    var damage: Float = 2f
 
     fun init(scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
@@ -21,7 +23,7 @@ object BulletManager {
         }
     }
 
-    fun obtain(): Bullet {
+    private fun obtain(): Bullet {
         val bullet = listBullet.find { it.free }
         return if (bullet == null) {
             val b = Bullet()
@@ -30,10 +32,15 @@ object BulletManager {
         } else bullet
     }
 
+    fun send(x: Float, y: Float, angle: Float) {
+        obtain().send(x, y, angle, damage)
+    }
+
     fun draw(canvas: Canvas) {
         listBullet.filter { !it.free }.forEach { it.draw(canvas) }
     }
 
+    @Synchronized
     fun release() {
         listBullet.clear()
     }
