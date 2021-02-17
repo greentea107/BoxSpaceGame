@@ -9,3 +9,5 @@
 
 编程语言为Kotlin，使用SurfaceView、LiveEventBus和协程。
 
+2021-02-17
+加入子弹击中敌机后的反弹效果
