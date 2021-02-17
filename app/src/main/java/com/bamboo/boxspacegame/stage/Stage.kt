@@ -35,7 +35,7 @@ class Stage {
         listEnemy.filter { !it.free }.forEach {
             it.move()
             // 判断敌人是否和玩家碰撞
-            if (MathUtils.cross(it.getRect(), Player.getRect())) {
+            if (MathUtils.cross(it.getRect(), Player.getRect()) && Player.isShow) {
                 val center = AppGobal.unitSize / 2
                 EffectManager.obtainBomb().play(Player.x + center, Player.y + center) {
                     gameStatus = MISSION_FAILED
