@@ -43,6 +43,27 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initButtons()
     }
 
+    override fun onPause() {
+        super.onPause()
+        stopBGM()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideStatusBar()
+        LogEx.i(">>>>>>>>${chkBGM.isChecked}")
+        if (chkBGM.isChecked) playBGM()
+    }
+
+    override fun onBackPressed() {
+        android.os.Process.killProcess(android.os.Process.myPid())
+    }
+
     private fun initEventBus() {
         LiveEventBus.get(AppGobal.EVENT_STAGE_NO, Int::class.java).observe(this) {
             tvStageNo.text = "$it"
@@ -120,16 +141,24 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         chkBGM.text = if (chkBGM.isChecked) "音乐：开" else "音乐：关"
         chkBGM.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
-                mediaPlayer?.stop()
-                mediaPlayer = null
+                stopBGM()
                 chkBGM.text = "音乐：关"
             } else {
-                if (mediaPlayer == null) initMediaPlayer()
-                mediaPlayer?.start()
+                playBGM()
                 chkBGM.text = "音乐：开"
             }
             saveSoundOption(isChecked, isPlaySFX())
         }
+    }
+
+    private fun playBGM() {
+        if (mediaPlayer == null) initMediaPlayer()
+        mediaPlayer?.start()
+    }
+
+    private fun stopBGM() {
+        mediaPlayer?.stop()
+        mediaPlayer = null
     }
 
     private fun initSFXButton() {
@@ -147,13 +176,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun initMediaPlayer() {
         mediaPlayer = MediaPlayer.create(this, R.raw.bgm)
         mediaPlayer?.isLooping = true
-        lifecycle.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            fun onResume() {
-                if (chkBGM.isChecked)
-                    mediaPlayer?.start()
-            }
-        })
     }
 
     /**
@@ -177,20 +199,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             if (chkSFX.text == "音效：开")
                 soundPool.play(mapSound[3], 1f, 1f, 0, 0, 1f)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cancel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        hideStatusBar()
-    }
-
-    override fun onBackPressed() {
-        android.os.Process.killProcess(android.os.Process.myPid())
     }
 
     /**
