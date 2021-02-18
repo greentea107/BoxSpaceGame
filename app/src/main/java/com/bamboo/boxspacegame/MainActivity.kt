@@ -1,6 +1,7 @@
 package com.bamboo.boxspacegame
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.MediaPlayer
 import android.media.SoundPool
 import android.os.*
@@ -10,6 +11,7 @@ import android.view.SurfaceHolder
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -19,6 +21,7 @@ import com.bamboo.boxspacegame.effect.FlashEffect
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
+import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -26,18 +29,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var soundPool: SoundPool
+    private var mediaPlayer: MediaPlayer? = null
     private val mapSound = SparseIntArray()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initButtons()
         initCrossRocker()
         initSurfaceView()
         initEventBus()
         initMediaPlayer()
         initSoundPool()
+        initButtons()
     }
 
     private fun initEventBus() {
@@ -113,21 +116,28 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     private fun initBGMButton() {
-        btnBGM.setOnClickListener {
-            if (btnBGM.text == "音乐：开") {
-                mediaPlayer.stop()
-                btnBGM.text = "音乐：关"
+        chkBGM.isChecked = isPlayBGM()
+        chkBGM.text = if (chkBGM.isChecked) "音乐：开" else "音乐：关"
+        chkBGM.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                mediaPlayer?.stop()
+                mediaPlayer = null
+                chkBGM.text = "音乐：关"
             } else {
-                mediaPlayer.prepare()
-                mediaPlayer.start()
-                btnBGM.text = "音乐：开"
+                if (mediaPlayer == null) initMediaPlayer()
+                mediaPlayer?.start()
+                chkBGM.text = "音乐：开"
             }
+            saveSoundOption(isChecked, isPlaySFX())
         }
     }
 
     private fun initSFXButton() {
-        btnSFX.setOnClickListener {
-            btnSFX.text = if (btnSFX.text == "音效：开") "音效：关" else "音效：开"
+        chkSFX.isChecked = isPlaySFX()
+        chkSFX.text = if (chkSFX.isChecked) "音效：开" else "音效：关"
+        chkSFX.setOnCheckedChangeListener { _, isChecked ->
+            chkSFX.text = if (isChecked) "音效：开" else "音效：关"
+            saveSoundOption(isPlayBGM(), isChecked)
         }
     }
 
@@ -136,12 +146,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
      */
     private fun initMediaPlayer() {
         mediaPlayer = MediaPlayer.create(this, R.raw.bgm)
-        mediaPlayer.isLooping = true
+        mediaPlayer?.isLooping = true
         lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                if (btnBGM.text == "音乐：开")
-                    mediaPlayer.start()
+                if (chkBGM.isChecked)
+                    mediaPlayer?.start()
             }
         })
     }
@@ -156,15 +166,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         mapSound.put(2, soundPool.load(this, R.raw.bullet_sfx, 1))
         mapSound.put(3, soundPool.load(this, R.raw.flash_sfx, 1))
         LiveEventBus.get(AppGobal.EVENT_BOMB_SFX, Boolean::class.java).observe(this) {
-            if (btnSFX.text == "音效：开")
+            if (chkSFX.text == "音效：开")
                 soundPool.play(mapSound[1], 1f, 1f, 0, 0, 1f)
         }
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX, Boolean::class.java).observe(this) {
-            if (btnSFX.text == "音效：开")
+            if (chkSFX.text == "音效：开")
                 soundPool.play(mapSound[2], 1f, 1f, 0, 0, 1f)
         }
         LiveEventBus.get(AppGobal.EVENT_FLASH_SFX, Boolean::class.java).observe(this) {
-            if (btnSFX.text == "音效：开")
+            if (chkSFX.text == "音效：开")
                 soundPool.play(mapSound[3], 1f, 1f, 0, 0, 1f)
         }
     }
@@ -273,4 +283,14 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             })
         }
     }
+
+    private fun saveSoundOption(isPlayBGM: Boolean, isPlaySFX: Boolean) {
+        getPreferences(Context.MODE_PRIVATE).edit {
+            this.putBoolean("bgm", isPlayBGM)
+            this.putBoolean("sfx", isPlaySFX)
+        }
+    }
+
+    private fun isPlayBGM() = getPreferences(Context.MODE_PRIVATE).getBoolean("bgm", true)
+    private fun isPlaySFX() = getPreferences(Context.MODE_PRIVATE).getBoolean("sfx", true)
 }

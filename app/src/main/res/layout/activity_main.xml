@@ -201,12 +201,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnBGM"
+            <CheckBox
+                android:id="@+id/chkBGM"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_single_color"
+                android:button="@null"
                 android:checked="true"
                 android:gravity="center"
                 android:text="音乐：开"
@@ -217,12 +218,15 @@
                 android:layout_width="10dp"
                 android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/btnSFX"
+            <CheckBox
+                android:id="@+id/chkSFX"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_single_color"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
                 android:text="音效：开"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
