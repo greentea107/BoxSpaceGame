@@ -69,7 +69,7 @@ class Stage {
             }
         }
         // 敌人登场
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             delay(2000) // 延时两秒后加载敌人
             gameStatus = READY
             repeat(enemyCount) {

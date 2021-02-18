@@ -18,7 +18,7 @@ object StageManager {
     var score = 0
 
     fun init(scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) {
+        scope.launch(Dispatchers.Default) {
             stage = Stage()
             stage?.setPlayerAndEnemy(enemyCount, enemyHP)
             while (true) {

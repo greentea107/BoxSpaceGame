@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     width: Int,
                     height: Int
                 ) {
-                    launch(Dispatchers.IO) {
+                    launch(Dispatchers.Default) {
                         BulletManager.init(this@MainActivity)
                         Player.initScope(this@MainActivity)
                         StageManager.init(this@MainActivity)

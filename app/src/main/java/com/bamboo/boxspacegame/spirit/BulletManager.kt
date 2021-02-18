@@ -14,7 +14,7 @@ object BulletManager {
     var damage: Float = 3f
 
     fun init(scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) {
+        scope.launch(Dispatchers.Default) {
             while (true) {
                 if (AppGobal.pause) continue
                 listBullet.filter { !it.free }.forEach { it.move() }
