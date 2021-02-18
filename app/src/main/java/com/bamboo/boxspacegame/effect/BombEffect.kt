@@ -3,6 +3,7 @@ package com.bamboo.boxspacegame.effect
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.utils.LogEx
+import java.util.*
 
 /**
  * 爆炸动画特效
@@ -14,6 +15,38 @@ class BombEffect : BaseEffect() {
 
     companion object {
         const val FRAME_COUNT = 20 // 动画的总帧数
+        fun init() {
+            buildBmp()
+        }
+
+        private fun buildBmp() {
+            val bmp = Bitmap.createBitmap(
+                AppGobal.unitSize.toInt(),
+                AppGobal.unitSize.toInt(),
+                Bitmap.Config.ARGB_8888
+            )
+            Canvas(bmp).apply {
+                val paint = Paint()
+                paint.color = Color.WHITE
+                paint.style = Paint.Style.FILL_AND_STROKE
+                repeat(FRAME_COUNT) {
+                    val x = Random().nextInt(bmp.width).toFloat()
+                    val y = Random().nextInt(bmp.height).toFloat()
+                    val r = Random().nextInt(2) + 2f
+                    paint.shader =
+                        RadialGradient(
+                            x, y, r,
+                            intArrayOf(
+                                Color.WHITE,
+                                Color.parseColor("#33FFFFFF")
+                            ),
+                            null, Shader.TileMode.CLAMP
+                        )
+                    drawCircle(x, y, r, paint)
+                }
+            }
+            AppGobal.bmpCache.put("bomb", bmp)
+        }
     }
 
     /**
@@ -32,8 +65,6 @@ class BombEffect : BaseEffect() {
      * 直接在屏幕上绘制图像，并不在游戏初始化时缓存
      */
     override fun draw(canvas: Canvas) {
-        paint.color = Color.WHITE
-        paint.strokeWidth = 2f
         val inc = AppGobal.unitSize / FRAME_COUNT
         currentFrame++
         if (currentFrame >= FRAME_COUNT) {
@@ -41,14 +72,21 @@ class BombEffect : BaseEffect() {
             free = true
             onFinished?.let { it() }
         } else {
-            if (currentFrame >= FRAME_COUNT / 2) {
-                paint.style = Paint.Style.STROKE
-                paint.alpha = 255
-            } else {
-                paint.style = Paint.Style.FILL
-                paint.alpha = 255 - (255 / FRAME_COUNT * 2 * currentFrame)
-            }
+            paint.color = Color.WHITE
+            paint.strokeWidth = 2f
+            paint.style = Paint.Style.STROKE
+            paint.alpha = (255 - (inc * currentFrame)).toInt()
             canvas.drawCircle(x, y, inc * currentFrame, paint)
+            val bmp = AppGobal.bmpCache["bomb"]
+            canvas.drawBitmap(
+                bmp,
+                Rect(0, 0, bmp.width, bmp.height),
+                RectF(
+                    x - inc * currentFrame, y - inc * currentFrame,
+                    x + inc * currentFrame, y + inc * currentFrame
+                ),
+                null
+            )
         }
     }
 }

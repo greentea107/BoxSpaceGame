@@ -15,6 +15,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.bamboo.boxspacegame.effect.BombEffect
 import com.bamboo.boxspacegame.effect.BulletEffect
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.effect.FlashEffect
@@ -284,6 +285,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     MapBackground.init()
                     BulletEffect.init()
                     FlashEffect.init()
+                    BombEffect.init()
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {}

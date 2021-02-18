@@ -7,6 +7,7 @@ object AppGobal {
     const val BMP_ENEMY = "enemy"
     const val BMP_PLAYER = "player"
     const val BMP_FLASH = "flash"
+    const val BMP_BOMB = "bomb"
     const val EVENT_STAGE_NO = "stageNo"
     const val EVENT_SCORE = "score"
     const val EVENT_BOMB_SFX = "bomb_sfx" // 爆炸音效
