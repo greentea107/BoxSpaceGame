@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onResume() {
         super.onResume()
         hideStatusBar()
-        LogEx.i(">>>>>>>>${chkBGM.isChecked}")
         if (chkBGM.isChecked) playBGM()
     }
 
