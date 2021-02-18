@@ -1,7 +1,9 @@
 # BoxSpaceGame
-空间大战：简易风格
+项目名称：Space Battle（空间大战）
 
 联系方式：52137124@qq.com
+
+项目主页：https://www.toutiao.com/i6928888667003978247/
 
 如果有问题可以加我的QQ群聊或关注微信公众号：口袋里的安卓
 
