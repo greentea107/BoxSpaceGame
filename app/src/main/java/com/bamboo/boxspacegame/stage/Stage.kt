@@ -4,12 +4,14 @@ import android.graphics.Canvas
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.spirit.Enemy
+import com.bamboo.boxspacegame.spirit.Enemy2
 import com.bamboo.boxspacegame.spirit.Player
-import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
-import kotlinx.coroutines.*
-import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import java.util.*
 
 /**
  * 游戏关卡
@@ -36,6 +38,7 @@ class Stage {
             it.move()
             // 判断敌人是否和玩家碰撞
             if (MathUtils.cross(it.getRect(), Player.getRect()) && Player.isShow) {
+                Player.isShow = false
                 val center = AppGobal.unitSize / 2
                 EffectManager.obtainBomb().play(Player.x + center, Player.y + center) {
                     gameStatus = MISSION_FAILED
@@ -70,10 +73,10 @@ class Stage {
         }
         // 敌人登场
         withContext(Dispatchers.Default) {
-            delay(2000) // 延时两秒后加载敌人
+            delay(1000) // 延时两秒后加载敌人
             gameStatus = READY
             repeat(enemyCount) {
-                initEnemy(enemyHP)
+                initEnemy(enemyHP, if (it % 5 == 0) 1 else 0)
                 delay(500)
                 if (it == (enemyCount - 1)) gameStatus = PLAYING
             }
@@ -83,11 +86,11 @@ class Stage {
     /**
      * 初始化敌人的位置和血量
      */
-    private fun initEnemy(HP: Float) {
-        var x = Random(System.currentTimeMillis()).nextInt(20) * AppGobal.unitSize
-        val stepY = AppGobal.screenHeight / AppGobal.unitSize.toInt()
-        var y = Random(System.currentTimeMillis()).nextInt(stepY) * AppGobal.unitSize
-        when (Random(System.currentTimeMillis()).nextInt(4)) {
+    private fun initEnemy(HP: Float, type: Int = 0) {
+        val step = AppGobal.unitSize.toInt() * 2
+        var x = Random().nextInt(AppGobal.screenWidth - step) + AppGobal.unitSize
+        var y = Random().nextInt(AppGobal.screenHeight - step) + AppGobal.unitSize
+        when (Random().nextInt(4)) {
             0 -> y = AppGobal.unitSize
             1 -> y = AppGobal.screenHeight - AppGobal.unitSize * 2
             2 -> x = AppGobal.unitSize
@@ -95,15 +98,19 @@ class Stage {
         }
         // 判断敌人的出场点是否在地图的透视区
         if (x <= AppGobal.unitSize) x = AppGobal.unitSize
-        if (x >= AppGobal.screenWidth - AppGobal.unitSize)
-            x = AppGobal.screenWidth - 1 - AppGobal.unitSize
+        if (x >= AppGobal.screenWidth - AppGobal.unitSize - 1)
+            x = AppGobal.screenWidth - AppGobal.unitSize - 1
         if (y < AppGobal.unitSize) y = AppGobal.unitSize
-        if (y >= AppGobal.screenHeight - AppGobal.unitSize)
-            y = AppGobal.screenHeight - 1 - AppGobal.unitSize
+        if (y >= AppGobal.screenHeight - AppGobal.unitSize - 1)
+            y = AppGobal.screenHeight - AppGobal.unitSize - 1
         // 播放入场动画
         EffectManager.obtainFlash().play(x, y, true) {
             // 设置敌人的位置并保存
-            val enemy = Enemy().apply {
+            val enemy = when (type) {
+                0 -> Enemy()
+                1 -> Enemy2()
+                else -> Enemy()
+            }.apply {
                 this.x = x
                 this.y = y
                 this.HP = HP

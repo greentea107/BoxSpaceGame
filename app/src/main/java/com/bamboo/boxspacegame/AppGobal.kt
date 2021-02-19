@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import android.util.LruCache
 
 object AppGobal {
-    const val BMP_ENEMY = "enemy"
+    const val BMP_ENEMY = "enemy1"
+    const val BMP_ENEMY_2 = "enemy2"
     const val BMP_PLAYER = "player"
     const val BMP_FLASH = "flash"
     const val BMP_BOMB = "bomb"

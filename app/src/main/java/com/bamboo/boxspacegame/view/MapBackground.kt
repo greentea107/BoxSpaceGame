@@ -69,7 +69,7 @@ object MapBackground {
         canvas.drawRect(r, paint) // 背景黑
 
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.color = Color.rgb(80, 120, 236)
+        paint.color = Color.rgb(25, 150, 255)
         paint.maskFilter = BlurMaskFilter(AppGobal.unitSize / 2, BlurMaskFilter.Blur.OUTER)
         val rin = RectF(
             AppGobal.unitSize,
@@ -105,7 +105,7 @@ object MapBackground {
             Player.x,
             Player.y,
             AppGobal.screenHeight / 2f,
-            intArrayOf(Color.BLUE, Color.BLACK), null, Shader.TileMode.CLAMP
+            intArrayOf(Color.rgb(85, 130, 255), Color.BLACK), null, Shader.TileMode.CLAMP
         )
         val inc = (AppGobal.screenHeight - AppGobal.unitSize * 2) / 20f
         repeat(20) {

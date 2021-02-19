@@ -15,7 +15,6 @@ object StageManager {
     private var currentStageNo = 1 // 当前的关卡数
     private var enemyCount = 5 // 初始的敌人数量
     private var enemyHP = 10f // 初始的敌人的HP量
-    var score = 0
 
     fun init(scope: CoroutineScope) {
         scope.launch(Dispatchers.Default) {
@@ -26,7 +25,6 @@ object StageManager {
                 when (stage?.getStatus()) {
                     Stage.READY -> {
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
-                        LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
                     }
                     Stage.PLAYING -> { // 关卡进行中
                         stage?.actionMotion()
@@ -40,14 +38,12 @@ object StageManager {
                         enemyHP += 5f
                         stage?.setPlayerAndEnemy(enemyCount, enemyHP)
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
-                        LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
                     }
                     Stage.MISSION_FAILED -> { // 通关失败
                         EffectManager.release()
                         BulletManager.release()
                         stage?.setPlayerAndEnemy(enemyCount, enemyHP)
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
-                        LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
                     }
                 }
                 delay(50)
@@ -66,7 +62,6 @@ object StageManager {
         currentStageNo = 1
         enemyCount = 5
         enemyHP = 10f
-        score = 0
         stage?.reset()
     }
 

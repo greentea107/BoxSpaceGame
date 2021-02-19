@@ -118,18 +118,26 @@ object Player : BaseSprite() {
      */
     private fun drawMotion(canvas: Canvas) {
         val cz = size.width / 5f
-        val cz2 = System.currentTimeMillis() % 12
         val cx = x + size.width / 2f
         val cy = y + size.height - cz / 2f
+        val shake = System.currentTimeMillis() % 12
         paint.style = Paint.Style.FILL
-        paint.maskFilter = BlurMaskFilter(cz * 2 + cz2, BlurMaskFilter.Blur.SOLID)
         paint.shader = RadialGradient(
-            cx, cy, cz + cz2,
-            intArrayOf(Color.WHITE, Color.parseColor("#91C8EB")), null,
+            cx, cy, cz + shake,
+            intArrayOf(
+                Color.WHITE,
+                Color.argb(180, 120, 180, 224),
+            ), null,
             Shader.TileMode.CLAMP
         )
-        canvas.drawOval(cx - size.width / 2, cy - cz2, cx + size.width / 2, cy + cz2, paint)
-        canvas.drawCircle(cx, cy, cz + cz2, paint)
+        canvas.drawOval(
+            cx - shake - size.width / 2,
+            cy - shake - cz / 2,
+            cx + shake + size.width / 2,
+            cy + shake + cz / 2,
+            paint
+        )
+        canvas.drawCircle(cx, cy, cz + shake, paint)
     }
 
     override fun move() {

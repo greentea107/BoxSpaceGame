@@ -69,7 +69,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             tvStageNo.text = "$it"
         }
         LiveEventBus.get(AppGobal.EVENT_SCORE, Int::class.java).observe(this) {
-            tvScore.text = "$it"
+            val score = tvScore.text.toString().toInt() + it
+            tvScore.text = "$score"
         }
     }
 

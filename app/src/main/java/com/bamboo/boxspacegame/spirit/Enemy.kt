@@ -7,11 +7,12 @@ import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
-import kotlin.random.Random
+import java.util.*
 
-class Enemy : BaseSprite() {
+open class Enemy : BaseSprite() {
     private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
+    protected var score = 1
 
     init {
         this.distance = 3f
@@ -76,7 +77,7 @@ class Enemy : BaseSprite() {
                 paint
             )
             paint.shader = null
-            paint.color = Color.WHITE
+            paint.color = Color.rgb(220,255,200)
             this.drawPath(path, paint)
         }
         AppGobal.bmpCache.put(AppGobal.BMP_ENEMY, bmp)
@@ -152,14 +153,13 @@ class Enemy : BaseSprite() {
             val cx = bmpEnemy?.width?.div(2) ?: 0
             val cy = bmpEnemy?.height?.div(2) ?: 0
             EffectManager.obtainBomb().play(x + cx, y + cy)
-            StageManager.score++
-            LiveEventBus.get(AppGobal.EVENT_SCORE).post(StageManager.score)
+            LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
             LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
         } else {
             this.HP -= bullet.damage
-            // 敌机被击中时再随机的往某个角度发射子弹，在视觉上作出子弹反弹的效果
-            val randomAngle = Random(System.currentTimeMillis()).nextInt(360).toFloat()
-            BulletManager.send(bullet.x, bullet.y, randomAngle)
         }
+        // 敌机被击中时再随机的往某个角度发射子弹，在视觉上作出子弹反弹的效果
+        val bulletAngle = angle + Random().nextInt(360).toFloat()
+        BulletManager.send(bullet.x, bullet.y, bulletAngle)
     }
 }
