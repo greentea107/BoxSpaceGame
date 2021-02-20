@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.jeremyliao.liveeventbus.LiveEventBus
 import java.util.*
 
 /**
@@ -57,7 +58,7 @@ class BombEffect : BaseEffect() {
         bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
         paint.color = Color.WHITE
         paint.strokeWidth = 2f
-        paint.style = Paint.Style.STROKE
+        paint.style = Paint.Style.FILL_AND_STROKE
     }
 
     /**
@@ -70,6 +71,8 @@ class BombEffect : BaseEffect() {
         this.y = y
         this.frameIndex = 0
         this.onFinished = onFinished
+        // 通过事件机制播放音效
+        LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
     }
 
     /**
@@ -88,6 +91,12 @@ class BombEffect : BaseEffect() {
             // 绘制冲击波效果
             val incStep = inc * frameIndex
             paint.alpha = 255 - incStep.toInt()
+            paint.shader = RadialGradient(
+                x, y, incStep, intArrayOf(
+                    Color.TRANSPARENT,
+                    Color.parseColor("#66FFFFFF")
+                ), null, Shader.TileMode.CLAMP
+            )
             canvas.drawCircle(x, y, incStep, paint)
             // 绘制碎片效果
             bmp?.let {
@@ -97,6 +106,11 @@ class BombEffect : BaseEffect() {
                     null
                 )
             }
+            paint.color = Color.WHITE
+            paint.style = Paint.Style.FILL_AND_STROKE
+            paint.alpha = 200
+            paint.shader = null
+            canvas.drawCircle(x, y, AppGobal.unitSize / 3, paint)
         }
     }
 }

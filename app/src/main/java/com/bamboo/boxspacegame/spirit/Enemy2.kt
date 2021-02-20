@@ -105,8 +105,10 @@ class Enemy2 : Enemy() {
                 x + AppGobal.unitSize / 2,
                 y + AppGobal.unitSize / 2
             ) {
-                drawMotion(this)
-                drawBitmap(it, x, y, null)
+                if (isShow) {
+                    drawMotion(this)
+                    drawBitmap(it, x, y, null)
+                }
             }
         }
     }
@@ -115,7 +117,7 @@ class Enemy2 : Enemy() {
      * 绘制圆形光晕
      */
     private fun drawMotion(canvas: Canvas) {
-        paint.color = Color.rgb(25,130,255)
+        paint.color = Color.rgb(25, 130, 255)
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.strokeWidth = 1f
         paint.maskFilter = BlurMaskFilter(25f, BlurMaskFilter.Blur.OUTER)

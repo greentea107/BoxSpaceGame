@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
      * 初始化背景音乐
      */
     private fun initMediaPlayer() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.bgm)
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm2)
         mediaPlayer?.isLooping = true
     }
 

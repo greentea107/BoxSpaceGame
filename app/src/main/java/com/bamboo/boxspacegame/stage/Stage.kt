@@ -7,10 +7,7 @@ import com.bamboo.boxspacegame.spirit.Enemy
 import com.bamboo.boxspacegame.spirit.Enemy2
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.utils.MathUtils
-import com.jeremyliao.liveeventbus.LiveEventBus
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -18,7 +15,7 @@ import java.util.*
  */
 class Stage {
     private var enemyCount: Int = 0
-    private var enemyHp: Float = 8f
+    private var enemyHP: Float = 8f
     private val listEnemy = mutableListOf<Enemy>()
     private var gameStatus = READY
 
@@ -33,6 +30,7 @@ class Stage {
     }
 
     fun actionMotion() {
+        addEnemy()
         // 遍历关卡中的全部敌方
         listEnemy.filter { !it.free }.forEach {
             it.move()
@@ -42,8 +40,6 @@ class Stage {
                 val center = AppGobal.unitSize / 2
                 EffectManager.obtainBomb().play(Player.x + center, Player.y + center) {
                     gameStatus = MISSION_FAILED
-                    // 通过事件机制播放音效
-                    LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
                 }
             }
         }
@@ -53,33 +49,48 @@ class Stage {
         }
     }
 
+    @Synchronized
+    fun setEnemyData(enemyCount: Int, enemyHP: Float) {
+        this.enemyCount = enemyCount
+        this.enemyHP = enemyHP
+        gameStatus = READY
+        listEnemy.clear()
+    }
+
     /**
      * 设置玩家的登场点和关卡中的敌人总数及敌人的HP值
      */
     @Synchronized
-    suspend fun setPlayerAndEnemy(enemyCount: Int, enemyHP: Float) {
-        this.enemyCount = enemyCount
-        this.enemyHp = enemyHP
+    fun setPlayerLocation() {
+        gameStatus = READY
         // 设置玩家登场
         Player.isShow = false
-        listEnemy.clear()
         EffectManager.obtainFlash().play(Player.x, Player.y, true) {
-            Player.let {
-                // 设置玩家的位置
-                it.isShow = true
-                it.x = AppGobal.screenWidth / 2f
-                it.y = AppGobal.screenHeight / 2f
+            val cx = AppGobal.screenWidth / 2f
+            val cy = AppGobal.screenHeight / 2f
+            EffectManager.obtainFlash().play(cx, cy) {
+                Player.let {
+                    // 设置玩家的位置
+                    it.isShow = true
+                    it.x = cx
+                    it.y = cy
+                }
+                gameStatus = PLAYING
             }
         }
-        // 敌人登场
-        withContext(Dispatchers.Default) {
-            delay(1000) // 延时两秒后加载敌人
-            gameStatus = READY
-            repeat(enemyCount) {
-                initEnemy(enemyHP, if (it % 5 == 0) 1 else 0)
-                delay(500)
-                if (it == (enemyCount - 1)) gameStatus = PLAYING
-            }
+    }
+
+    private var startMillis = System.currentTimeMillis()
+
+    /**
+     * 敌人登场
+     */
+    @Synchronized
+    private fun addEnemy() {
+        if((System.currentTimeMillis()-startMillis)<1000) return
+        if (listEnemy.size < enemyCount) {
+            initEnemy(enemyHP, if (listEnemy.size % 5 == 0) 1 else 0)
+            startMillis = System.currentTimeMillis()
         }
     }
 
@@ -103,21 +114,27 @@ class Stage {
         if (y < AppGobal.unitSize) y = AppGobal.unitSize
         if (y >= AppGobal.screenHeight - AppGobal.unitSize - 1)
             y = AppGobal.screenHeight - AppGobal.unitSize - 1
+        // 设置敌人的位置并保存
+        val enemy = when (type) {
+            0 -> Enemy()
+            1 -> Enemy2()
+            else -> Enemy()
+        }.apply {
+            this.x = x
+            this.y = y
+            this.HP = HP
+            this.free = false
+            this.isShow = false
+            this.angle = setAngleByCoord(Player.x, Player.y)
+        }
+        listEnemy.add(enemy)
         // 播放入场动画
         EffectManager.obtainFlash().play(x, y, true) {
-            // 设置敌人的位置并保存
-            val enemy = when (type) {
-                0 -> Enemy()
-                1 -> Enemy2()
-                else -> Enemy()
-            }.apply {
-                this.x = x
-                this.y = y
-                this.HP = HP
-                this.free = false
-                this.angle = setAngleByCoord(Player.x, Player.y)
+            enemy.let {
+                it.isShow = true
+                it.x = x
+                it.y = y
             }
-            listEnemy.add(enemy)
         }
     }
 

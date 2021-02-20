@@ -2,7 +2,6 @@ package com.bamboo.boxspacegame.stage
 
 import android.graphics.Canvas
 import com.bamboo.boxspacegame.AppGobal
-import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.coroutines.*
@@ -18,8 +17,10 @@ object StageManager {
 
     fun init(scope: CoroutineScope) {
         scope.launch(Dispatchers.Default) {
-            stage = Stage()
-            stage?.setPlayerAndEnemy(enemyCount, enemyHP)
+            stage = Stage().apply {
+                this.setEnemyData(enemyCount, enemyHP)
+                this.setPlayerLocation()
+            }
             while (true) {
                 if (AppGobal.pause) continue
                 when (stage?.getStatus()) {
@@ -30,19 +31,21 @@ object StageManager {
                         stage?.actionMotion()
                     }
                     Stage.MISSION_COMPLETED -> { // 通关成功
-                        EffectManager.release()
-                        BulletManager.release()
                         BulletManager.damage += 2f
                         currentStageNo++
                         enemyCount++
                         enemyHP += 5f
-                        stage?.setPlayerAndEnemy(enemyCount, enemyHP)
+                        stage?.let {
+                            it.setEnemyData(enemyCount, enemyHP)
+                            it.setPlayerLocation()
+                        }
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
                     }
                     Stage.MISSION_FAILED -> { // 通关失败
-                        EffectManager.release()
-                        BulletManager.release()
-                        stage?.setPlayerAndEnemy(enemyCount, enemyHP)
+                        stage?.let {
+                            it.setEnemyData(enemyCount, enemyHP)
+                            it.setPlayerLocation()
+                        }
                         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
                     }
                 }

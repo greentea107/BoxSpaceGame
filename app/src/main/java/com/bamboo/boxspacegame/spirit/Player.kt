@@ -19,7 +19,6 @@ object Player : BaseSprite() {
     private var isAttack = false
     private val paint = Paint()
     var size = SizeF(0f, 0f) // 玩家的尺寸
-    var isShow = true
 
     init {
         this.distance = 3f // 玩家的移动距离
@@ -47,7 +46,7 @@ object Player : BaseSprite() {
         scope.launch(Dispatchers.Default) {
             while (true) {
                 if (AppGobal.pause) continue
-                if (isAttack) {
+                if (isAttack && isShow) {
                     BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)
                 }
                 delay(Bullet.INTERVAL) // 发射子弹的间隔
@@ -80,10 +79,10 @@ object Player : BaseSprite() {
             path.lineTo(0f, size.height - (size.height / 3))
             path.close()
             this.drawPath(path, paint)
-            paint.color = Color.WHITE
             paint.style = Paint.Style.STROKE
-            paint.shader = null
             paint.strokeWidth = 1f
+            paint.shader = null
+            paint.color = Color.WHITE
             paint.strokeJoin = Paint.Join.ROUND
             this.drawPath(path, paint)
             this.drawLine(size.width / 2, 0f, size.width / 2, size.height, paint)

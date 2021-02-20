@@ -4,7 +4,6 @@ import android.graphics.*
 import androidx.core.graphics.withRotation
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
-import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 import java.util.*
@@ -17,6 +16,7 @@ open class Enemy : BaseSprite() {
     init {
         this.distance = 3f
         this.HP = 10f
+        this.isShow = false
         bmpEnemy = AppGobal.bmpCache[AppGobal.BMP_ENEMY]
         if (bmpEnemy == null) buildBmp()
     }
@@ -31,7 +31,7 @@ open class Enemy : BaseSprite() {
             Bitmap.Config.ARGB_8888
         )
         Canvas(bmp).apply {
-            val paint = Paint()
+            // 绘制敌机的图形轮廓
             val path = Path()
             path.moveTo(AppGobal.unitSize / 2, 0f)
             path.lineTo(AppGobal.unitSize, AppGobal.unitSize - AppGobal.unitSize / 3)
@@ -43,6 +43,7 @@ open class Enemy : BaseSprite() {
             path.lineTo(AppGobal.unitSize / 3, AppGobal.unitSize - AppGobal.unitSize / 3)
             path.lineTo(0f, AppGobal.unitSize - AppGobal.unitSize / 3)
             path.close()
+            val paint = Paint()
             paint.style = Paint.Style.FILL_AND_STROKE
             paint.shader = RadialGradient(
                 AppGobal.unitSize / 2f,
@@ -77,7 +78,7 @@ open class Enemy : BaseSprite() {
                 paint
             )
             paint.shader = null
-            paint.color = Color.rgb(220,255,200)
+            paint.color = Color.rgb(220, 255, 200)
             this.drawPath(path, paint)
         }
         AppGobal.bmpCache.put(AppGobal.BMP_ENEMY, bmp)
@@ -105,8 +106,10 @@ open class Enemy : BaseSprite() {
                 x + AppGobal.unitSize / 2,
                 y + AppGobal.unitSize / 2
             ) {
-                drawMotion(this)
-                drawBitmap(it, x, y, null)
+                if (isShow) {
+                    drawMotion(this)
+                    drawBitmap(it, x, y, null)
+                }
             }
         }
     }
@@ -154,7 +157,6 @@ open class Enemy : BaseSprite() {
             val cy = bmpEnemy?.height?.div(2) ?: 0
             EffectManager.obtainBomb().play(x + cx, y + cy)
             LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
-            LiveEventBus.get(AppGobal.EVENT_BOMB_SFX).post(true)
         } else {
             this.HP -= bullet.damage
         }
