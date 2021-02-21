@@ -34,7 +34,7 @@ object Player : BaseSprite() {
     fun initScope(scope: CoroutineScope) {
         // 由于玩家的移动是连续的，所以需要通过循环来实现
         scope.launch(Dispatchers.Default) {
-            while (true) {
+            while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 if (isMove && isShow) {
                     move()
@@ -44,7 +44,7 @@ object Player : BaseSprite() {
         }
         // 由于子弹是连续发射的，所以需要一个循环来处理，每次循环时根据isAttack判断是否需要发射
         scope.launch(Dispatchers.Default) {
-            while (true) {
+            while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 if (isAttack && isShow) {
                     BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)

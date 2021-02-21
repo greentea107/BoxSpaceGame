@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="text_10_cyan">
+        <item name="android:textColor">@color/cyan_text</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="text_12_cyan">
+        <item name="android:textColor">@color/cyan_text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text_14_cyan">
+        <item name="android:textColor">@color/cyan_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

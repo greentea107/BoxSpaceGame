@@ -15,7 +15,7 @@ object BulletManager {
 
     fun init(scope: CoroutineScope) {
         scope.launch(Dispatchers.Default) {
-            while (true) {
+            while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 listBullet.filter { !it.free }.forEach { it.move() }
                 delay(3)

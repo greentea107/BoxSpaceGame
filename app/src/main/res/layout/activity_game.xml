@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main"
+    android:orientation="horizontal"
+    tools:context=".GameActivity">
+
+    <!--  左侧布局  -->
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/ibtnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/btn_single_color"
+                android:src="@drawable/baseline_arrow_back_white_24dp" />
+
+            <Button
+                android:id="@+id/btnPause"
+                style="@style/text_14_cyan"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:text="暂停" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:stretchColumns="1">
+
+            <TableRow>
+
+                <TextView
+                    style="@style/text_12_cyan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关数：" />
+
+                <TextView
+                    android:id="@+id/tvStageNo"
+                    style="@style/text_12_cyan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="001" />
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/cyan_line" />
+
+            <TableRow>
+
+                <TextView
+                    style="@style/text_12_cyan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="最快用时：" />
+
+                <TextView
+                    android:id="@+id/tvFastestTime"
+                    style="@style/text_12_cyan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="0" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/cyan_line" />
+
+            <TableRow>
+
+                <TextView
+                    style="@style/text_12_cyan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前用时：" />
+
+                <TextView
+                    android:id="@+id/tvUseTime"
+                    style="@style/text_12_cyan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="0" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/cyan_line" />
+        </TableLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/bg_rocker">
+
+            <com.bamboo.boxspacegame.view.CrossRocker
+                android:id="@+id/rocker"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:arrowDark="@color/cyan_dark"
+                app:arrowLight="@color/cyan_line"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:padBackgroundColor="#3359"
+                app:showAxisArrow="true"
+                app:showHotSport="true" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
+
+    <!--  右侧布局  -->
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shadowColor="@android:color/holo_blue_light"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="3"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold|italic" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/cyan_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnFire"
+                style="@style/text_14_cyan"
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:background="@drawable/btn_single_color"
+                android:text="开火" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/btnJump"
+                style="@style/text_14_cyan"
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:background="@drawable/btn_single_color"
+                android:text="瞬移" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/chkBGM"
+                style="@style/text_10_cyan"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="音乐：开" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+            <CheckBox
+                android:id="@+id/chkSFX"
+                style="@style/text_10_cyan"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_single_color"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="音效：开" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
