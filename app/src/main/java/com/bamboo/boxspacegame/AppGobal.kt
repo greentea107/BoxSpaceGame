@@ -13,6 +13,7 @@ object AppGobal {
     const val EVENT_SCORE = "score"
     const val EVENT_FASTEST_TIME = "fastest_time"
     const val EVENT_CURRENT_TIME = "current_time"
+    const val EVENT_GAME_OVER = "game_over"
     const val EVENT_BOMB_SFX = "bomb_sfx" // 爆炸音效
     const val EVENT_BULLET_SFX = "bullet_sfx" // 子弹音效
     const val EVENT_FLASH_SFX = "flash_sfx" // 瞬移音效

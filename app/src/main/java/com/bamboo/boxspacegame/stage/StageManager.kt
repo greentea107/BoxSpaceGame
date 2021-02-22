@@ -23,6 +23,10 @@ object StageManager {
     private val listRecord = mutableListOf<RecordBean>()
 
     fun init(scope: CoroutineScope) {
+        // 从本地读取各关的记录
+        listRecord.clear()
+        listRecord += RecordManager.loadStageRecord()
+        // 运行协程
         scope.launch(Dispatchers.Default) {
             stage = Stage().apply {
                 this.setEnemyData(enemyCount, enemyHP)
@@ -31,43 +35,70 @@ object StageManager {
             while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 when (stage?.getStatus()) {
-                    Stage.READY -> {
-                        startMillis = System.currentTimeMillis()
-                        LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
-                        LiveEventBus.get(AppGobal.EVENT_FASTEST_TIME).post(true)
+                    Stage.READY -> { // 准备阶段
+                        onReady()
                     }
                     Stage.PLAYING -> { // 关卡进行中
-                        stage?.actionMotion()
-                        LiveEventBus.get(AppGobal.EVENT_CURRENT_TIME)
-                            .post(System.currentTimeMillis() - startMillis)
+                        onPlaying()
                     }
                     Stage.MISSION_COMPLETED -> { // 通关成功
-                        RecordManager.saveStageRecord(
-                            currentStageNo,
-                            startMillis, System.currentTimeMillis(),
-                            listRecord
-                        )
-                        BulletManager.damage += 2f // 子弹威力升级
-                        currentStageNo++
-                        enemyCount++
-                        enemyHP += 5f
-                        stage?.let {
-                            it.setEnemyData(enemyCount, enemyHP)
-                            it.setPlayerLocation()
-                        }
-                        LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
+                        onMissionComplete()
                     }
                     Stage.MISSION_FAILED -> { // 通关失败
-                        stage?.let {
-                            it.setEnemyData(enemyCount, enemyHP)
-                            it.setPlayerLocation()
-                        }
-                        LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
+                        onMissionFailed()
                     }
                 }
                 delay(50)
             }
         }
+    }
+
+    /**
+     * 通关成功并开始下一关
+     */
+    private fun onMissionComplete() {
+        // 保存关卡的记录
+        RecordManager.saveStageRecord(
+            currentStageNo,
+            startMillis, System.currentTimeMillis(),
+            listRecord
+        )
+        // 设置下一关的参数
+        BulletManager.damage += 2f // 子弹威力升级
+        currentStageNo++
+        enemyCount++
+        enemyHP += 5f
+        stage?.let {
+            it.setEnemyData(enemyCount, enemyHP)
+            it.setPlayerLocation()
+        }
+        // 刷新控件，显示关卡数
+        LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
+    }
+
+    /**
+     * 通关失败并退回首页
+     */
+    private fun onMissionFailed() {
+        RecordManager.saveStageRecord(
+            currentStageNo,
+            startMillis, System.currentTimeMillis(),
+            listRecord
+        )
+        currentStageNo = 1
+        LiveEventBus.get(AppGobal.EVENT_GAME_OVER).post(true)
+    }
+
+    private fun onPlaying() {
+        stage?.actionMotion()
+        LiveEventBus.get(AppGobal.EVENT_CURRENT_TIME)
+            .post(System.currentTimeMillis() - startMillis)
+    }
+
+    private fun onReady() {
+        startMillis = System.currentTimeMillis()
+        LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
+        LiveEventBus.get(AppGobal.EVENT_FASTEST_TIME).post(true)
     }
 
     fun draw(canvas: Canvas) {

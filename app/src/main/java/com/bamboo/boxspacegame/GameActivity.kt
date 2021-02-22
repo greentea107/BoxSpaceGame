@@ -74,6 +74,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         LiveEventBus.get(AppGobal.EVENT_CURRENT_TIME, Long::class.java).observe(this) {
             tvUseTime.text = "$it"
         }
+        LiveEventBus.get(AppGobal.EVENT_GAME_OVER, Boolean::class.java).observe(this) {
+            onBackPressed()
+        }
     }
 
     private fun initButtons() {

@@ -29,6 +29,7 @@ class EntranceActivity : AppCompatActivity() {
         ibtnExit.setOnClickListener { onBackPressed() }
         btnEntrance.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
+            overridePendingTransition(0, 0)
         }
         btnClearScore.setOnClickListener {
             RecordManager.clearStageRecord()
@@ -88,7 +89,7 @@ class EntranceActivity : AppCompatActivity() {
         super.onResume()
         RecordManager.loadStageRecord().let {
             listRecord.clear()
-            listRecord.addAll(it)
+            listRecord.addAll(it.sortedBy { it.stageNo })
             rvData.adapter?.notifyDataSetChanged()
         }
     }

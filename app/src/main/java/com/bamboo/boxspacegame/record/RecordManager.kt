@@ -24,6 +24,9 @@ object RecordManager {
         return list.find { it.stageNo == stageNo }
     }
 
+    /**
+     * 保存关卡记录到本地
+     */
     fun saveStageRecord(
         stageNo: Int,
         startMillis: Long,
@@ -31,21 +34,24 @@ object RecordManager {
         listRecord: MutableList<RecordBean>
     ) {
         val time = endMillis - startMillis
-        val bean = RecordBean(stageNo, 0, time)
-        if (getStageRecord(stageNo) == null || getStageRecord(stageNo)?.fastestTime ?: 0 < time) {
+        // 从集合获取关卡对象，如果对象为空则创建并加入集合
+        val bean = listRecord.find { it.stageNo == stageNo }
+            ?: RecordBean(stageNo, time, time).apply { listRecord += this }
+        if (time < bean.fastestTime) {
             bean.fastestTime = time
         }
-        listRecord += bean
-        MyApp.context
-            ?.getSharedPreferences("record", Context.MODE_PRIVATE)
+        // 序列化集合数据到本地文件
+        MyApp.context?.getSharedPreferences("record", Context.MODE_PRIVATE)
             ?.edit {
                 this.putString("records", RecordBean.toJson(listRecord))
             }
     }
 
+    /**
+     * 清空本地的关卡记录
+     */
     fun clearStageRecord() {
-        MyApp.context
-            ?.getSharedPreferences("record", Context.MODE_PRIVATE)
+        MyApp.context?.getSharedPreferences("record", Context.MODE_PRIVATE)
             ?.edit { clear() }
     }
 }
