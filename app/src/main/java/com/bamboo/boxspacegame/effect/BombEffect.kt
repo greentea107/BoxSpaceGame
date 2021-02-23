@@ -112,7 +112,7 @@ class BombEffect : BaseEffect() {
             }
             paint.color = Color.WHITE
             paint.style = Paint.Style.FILL_AND_STROKE
-            paint.alpha = 200
+            paint.alpha = 255 - incStep.toInt()
             paint.shader = null
             canvas.drawCircle(x, y, AppGobal.unitSize / 3, paint)
         }
