@@ -1,5 +1,4 @@
 # Space Battle（空间大战）
-==
 这是一款Android平台独占的射击型小游戏。游戏使用Android原生的API和控件编写而成，旨在展示这个API和控件除了可以用于
 应用程序的开发以外也能用于游戏的编写。 
 
@@ -20,7 +19,7 @@ QQ：52137124
 
 ##技术栈
 Kotlin+协程+SurfaceView+MediaPlayer+SoundPool+LiveEventBus。
-==
+
 更新记录
 ==
 2021-02-22：新增入口界面和关卡记录功能
