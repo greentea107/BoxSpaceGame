@@ -37,6 +37,8 @@ object RecordManager {
         // 从集合获取关卡对象，如果对象为空则创建并加入集合
         val bean = listRecord.find { it.stageNo == stageNo }
             ?: RecordBean(stageNo, time, time).apply { listRecord += this }
+        bean.time = time // 保存本次用时
+        // 判断是否要保存最快用时
         if (time < bean.fastestTime) {
             bean.fastestTime = time
         }

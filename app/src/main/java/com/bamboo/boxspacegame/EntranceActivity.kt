@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.Player
+import com.bamboo.boxspacegame.utils.LogEx
 import kotlinx.android.synthetic.main.activity_entrance.*
 import kotlinx.android.synthetic.main.item_record.view.*
 
@@ -132,7 +133,7 @@ class EntranceActivity : AppCompatActivity() {
         super.onResume()
         RecordManager.loadStageRecord().let {
             listRecord.clear()
-            listRecord.addAll(it.sortedBy { it.stageNo })
+            listRecord.addAll(it.sortedBy { it.stageNo }.filter { it.time != 0L })
             rvData.adapter?.notifyDataSetChanged()
         }
     }

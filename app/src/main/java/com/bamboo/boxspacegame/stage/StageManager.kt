@@ -5,6 +5,7 @@ import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
+import com.bamboo.boxspacegame.utils.LogEx
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,13 @@ object StageManager {
     private val listRecord = mutableListOf<RecordBean>()
 
     fun init(scope: CoroutineScope) {
+        currentStageNo = 1
+        enemyCount = 5
+        enemyHP = 10f
         // 从本地读取各关的记录
         listRecord.clear()
         listRecord += RecordManager.loadStageRecord()
+        listRecord.forEach { it.time = 0L } // 清除上次用时记录
         // 运行协程
         scope.launch(Dispatchers.Default) {
             stage = Stage().apply {
@@ -63,6 +68,8 @@ object StageManager {
             startMillis, System.currentTimeMillis(),
             listRecord
         )
+        listRecord[currentStageNo - 1].time = System.currentTimeMillis() - startMillis
+        startMillis = System.currentTimeMillis()
         // 设置下一关的参数
         BulletManager.damage += 2f // 子弹威力升级
         currentStageNo++
