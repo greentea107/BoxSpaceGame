@@ -1,7 +1,9 @@
 package com.bamboo.boxspacegame
 
 import android.content.Intent
+import android.graphics.*
 import android.os.Bundle
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
+import com.bamboo.boxspacegame.spirit.Player
 import kotlinx.android.synthetic.main.activity_entrance.*
 import kotlinx.android.synthetic.main.item_record.view.*
 
@@ -20,9 +23,49 @@ class EntranceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entrance)
+        initLogo()
         initButtons()
         initRecyclerView()
         initOptionAudio()
+    }
+
+    /**
+     * 用代码生成图标
+     */
+    private fun initLogo() {
+        ivLogo.post {
+            val bmp = Bitmap.createBitmap(ivLogo.width, ivLogo.height, Bitmap.Config.ARGB_8888)
+            Canvas(bmp).apply {
+                val paint = Paint()
+                paint.color = Color.WHITE
+                paint.shader = RadialGradient(
+                    bmp.width / 2f, 0f, bmp.height.toFloat(),
+                    intArrayOf(Color.WHITE, Color.DKGRAY), null,
+                    Shader.TileMode.CLAMP
+                )
+                val path = Path()
+                path.moveTo(bmp.width / 2f, 0f)
+                path.lineTo(bmp.width.toFloat(), (bmp.height - (bmp.height / 3)).toFloat())
+                path.lineTo(bmp.width / 2f, bmp.height.toFloat())
+                path.lineTo(0f, (bmp.height - (bmp.height / 3)).toFloat())
+                path.close()
+                this.drawPath(path, paint)
+                paint.style = Paint.Style.STROKE
+                paint.strokeWidth = 1f
+                paint.shader = null
+                paint.color = Color.WHITE
+                paint.strokeJoin = Paint.Join.ROUND
+                this.drawPath(path, paint)
+                this.drawLine(
+                    bmp.width / 2f,
+                    0f,
+                    bmp.width / 2f,
+                    bmp.height.toFloat(),
+                    paint
+                )
+            }
+            ivLogo.setImageBitmap(bmp)
+        }
     }
 
     private fun initButtons() {

@@ -48,10 +48,12 @@ class MyApp : Application() {
             }
 
             override fun onActivityResumed(activity: Activity) {
+                // 屏幕常亮
                 activity.window.addFlags(
                     WindowManager.LayoutParams.FLAG_FULLSCREEN or
                             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 )
+                // 全屏，隐藏状态栏和导航栏
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                     val v = activity.window.decorView
                     v.systemUiVisibility = View.GONE

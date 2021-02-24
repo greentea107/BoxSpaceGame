@@ -23,7 +23,7 @@ object Player : BaseSprite() {
     init {
         this.distance = 3f // 玩家的移动距离
         // 设置精灵的尺寸为SurfaceView的1/20
-        this.size = SizeF(AppGobal.screenWidth / 20f, AppGobal.screenWidth / 20f)
+        this.size = SizeF(AppGobal.unitSize, AppGobal.unitSize)
         this.angle = 270f // 初始化玩家的角度为12点钟方向
         // 初始位置为屏幕居中
         this.x = (AppGobal.screenWidth - size.width) / 2

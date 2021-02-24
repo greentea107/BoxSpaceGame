@@ -19,7 +19,7 @@ object AppGobal {
     const val EVENT_FLASH_SFX = "flash_sfx" // 瞬移音效
     var screenWidth = 0
     var screenHeight = 0
-    var unitSize = 0f
+    var unitSize = 0f // 基准单位，屏幕上的玩家、敌人、爆炸等物体的大小以此为基准
     var isRunning = true
     var pause = false
     val bmpCache = LruCache<String, Bitmap>(120)

@@ -243,6 +243,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         MapBackground.init()
                         BulletEffect.init()
                         FlashEffect.init()
+                        BombEffect.init()
                         BulletManager.init(this@GameActivity)
                         Player.initScope(this@GameActivity)
                         StageManager.init(this@GameActivity)

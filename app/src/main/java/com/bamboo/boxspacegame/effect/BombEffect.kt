@@ -13,56 +13,65 @@ class BombEffect : BaseEffect() {
     private val paint = Paint()
     private var frameIndex = 1
     private var bmp: Bitmap? = null
-    private var size = SizeF(0f, 0f)
     private var onFinished: (() -> Unit)? = null // 动画播放完毕后的回调函数
 
     companion object {
         const val FRAME_COUNT = 20 // 动画的总帧数
         const val BOMB_STYLE_COUNT = 5// 爆炸样式总数
+        var size = SizeF(0f, 0f)
+
+        fun init() {
+            // 爆炸的大小为基准单位的2倍
+            size = SizeF(AppGobal.unitSize * 2, AppGobal.unitSize * 2)
+            buildBmp()
+        }
+
+        /**
+         * 生成碎片的静态Bitmap
+         */
+        private fun buildBmp() {
+            // 用一个常量循环生成，以造成碎片样式的多样化
+            repeat(BOMB_STYLE_COUNT) {
+                val bmp = Bitmap.createBitmap(
+                    size.width.toInt(),
+                    size.height.toInt(),
+                    Bitmap.Config.ARGB_8888
+                )
+                Canvas(bmp).apply {
+                    val paint = Paint()
+                    paint.color = Color.WHITE
+                    paint.style = Paint.Style.FILL_AND_STROKE
+                    // 在循环体绘制碎片，循环一次就是绘制一个碎片，这里用帧数代表碎片总数
+                    repeat(FRAME_COUNT) {
+                        // 用随机数绘制碎片的位置和大小，碎片就是一个实心圆
+                        val x = Random().nextInt(bmp.width).toFloat()
+                        val y = Random().nextInt(bmp.height).toFloat()
+                        val r = Random().nextInt(2) + 2f
+                        paint.shader =
+                            RadialGradient(
+                                x, y, r,
+                                intArrayOf(
+                                    Color.WHITE,
+                                    Color.parseColor("#33FFFFFF")
+                                ),
+                                null, Shader.TileMode.CLAMP
+                            )
+                        drawCircle(x, y, r, paint)
+                    }
+                }
+                // 对绘制的碎片对象进行缓存
+                AppGobal.bmpCache.put("${AppGobal.BMP_BOMB}_$it", bmp)
+            }
+        }
     }
 
     init {
+        // 对象在实例化时会随机的从缓存中取出碎片Bitmap
         val styleIndex = Random().nextInt(BOMB_STYLE_COUNT)
         bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
-        if (bmp == null) {
-            buildBmp()
-            bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
-        }
         paint.color = Color.WHITE
         paint.strokeWidth = 2f
         paint.style = Paint.Style.FILL_AND_STROKE
-    }
-
-    private fun buildBmp() {
-        size = SizeF(AppGobal.unitSize * 2, AppGobal.unitSize * 2)
-        repeat(BOMB_STYLE_COUNT) {
-            val bmp = Bitmap.createBitmap(
-                size.width.toInt(),
-                size.height.toInt(),
-                Bitmap.Config.ARGB_8888
-            )
-            Canvas(bmp).apply {
-                val paint = Paint()
-                paint.color = Color.WHITE
-                paint.style = Paint.Style.FILL_AND_STROKE
-                repeat(FRAME_COUNT) {
-                    val x = Random().nextInt(bmp.width).toFloat()
-                    val y = Random().nextInt(bmp.height).toFloat()
-                    val r = Random().nextInt(2) + 2f
-                    paint.shader =
-                        RadialGradient(
-                            x, y, r,
-                            intArrayOf(
-                                Color.WHITE,
-                                Color.parseColor("#33FFFFFF")
-                            ),
-                            null, Shader.TileMode.CLAMP
-                        )
-                    drawCircle(x, y, r, paint)
-                }
-            }
-            AppGobal.bmpCache.put("${AppGobal.BMP_BOMB}_$it", bmp)
-        }
     }
 
     /**
@@ -80,7 +89,8 @@ class BombEffect : BaseEffect() {
     }
 
     /**
-     * 直接在屏幕上绘制图像，并不在游戏初始化时缓存
+     * 直接在屏幕上绘制爆炸图像，除了碎片外冲击波和光球由代码绘制
+     * 此方法每调用一次就是绘制一帧
      */
     override fun draw(canvas: Canvas) {
         val inc = size.width / FRAME_COUNT
