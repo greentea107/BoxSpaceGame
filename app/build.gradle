@@ -54,4 +54,6 @@ dependencies {
     // LiveEventBus
     implementation 'com.jeremyliao:live-event-bus-x:1.7.3'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
 }

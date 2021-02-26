@@ -23,3 +23,5 @@
 -keep class com.jeremyliao.liveeventbus.** { *; }
 -keep class androidx.lifecycle.** { *; }
 -keep class androidx.arch.core.** { *; }
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

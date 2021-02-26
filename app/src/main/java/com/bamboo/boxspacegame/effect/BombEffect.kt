@@ -99,7 +99,10 @@ class BombEffect : BaseEffect() {
         if (frameIndex >= FRAME_COUNT) {
             // 播放完毕则将对象设为闲置
             frameIndex = 0
-            free = true
+            free = true // 标记为空闲
+            // 重新从缓存中随机取出一张碎片Bitmap
+            val styleIndex = Random().nextInt(BOMB_STYLE_COUNT)
+            bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
             onFinished?.let { it() } // 调用完毕后的响应方法
         } else {
             // 绘制冲击波效果

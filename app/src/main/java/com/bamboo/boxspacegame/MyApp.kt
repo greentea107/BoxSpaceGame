@@ -10,6 +10,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.content.edit
 import com.jeremyliao.liveeventbus.LiveEventBus
+import com.tencent.bugly.crashreport.CrashReport
 
 class MyApp : Application() {
     companion object {
@@ -39,6 +40,7 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
+        CrashReport.initCrashReport(applicationContext, "135384028a", false)
         LiveEventBus.config().enableLogger(false).lifecycleObserverAlwaysActive(false)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
