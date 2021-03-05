@@ -3,7 +3,7 @@
     <size android:height="24dp" />
     <corners android:radius="12dp" />
     <stroke
-        android:width="1dp"
+        android:width="0.5dp"
         android:color="@color/cyan_line" />
     <gradient
         android:endColor="@color/cyan_light"
