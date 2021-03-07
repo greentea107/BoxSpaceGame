@@ -31,3 +31,4 @@ Kotlin+协程+SurfaceView+MediaPlayer+SoundPool+LiveEventBus。
 --
 2021-02-17：加入子弹击中敌机后的反弹效果
 --
+2021-03-07：加入爆雷功能，即全屏清敌效果
