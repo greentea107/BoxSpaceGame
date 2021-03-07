@@ -16,6 +16,10 @@ object EffectManager {
         return effect ?: t.apply { listEffect += this }
     }
 
+    fun obtainGrenade(): GrenadeEffect {
+        return obtain(GrenadeEffect()) as GrenadeEffect
+    }
+
     fun obtainBomb(): BombEffect {
         return obtain(BombEffect()) as BombEffect
     }

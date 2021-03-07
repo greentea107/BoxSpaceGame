@@ -141,7 +141,11 @@ open class Enemy : BaseSprite() {
         return MathUtils.getAngle(x, y, targetX, targetY).toFloat()
     }
 
-    fun getRect() = RectF(x, y, x + AppGobal.unitSize, y + AppGobal.unitSize)
+    fun getRect(): RectF {
+        val width = bmpEnemy?.width ?: AppGobal.unitSize
+        val height = bmpEnemy?.height ?: AppGobal.unitSize
+        return RectF(x, y, x + width.toFloat(), y + height.toFloat())
+    }
 
     /**
      * 处理敌人被子弹击中的流程

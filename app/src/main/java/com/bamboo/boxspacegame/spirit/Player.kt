@@ -5,6 +5,8 @@ import android.util.SizeF
 import androidx.core.graphics.withRotation
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
+import com.bamboo.boxspacegame.stage.StageManager
+import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +21,7 @@ object Player : BaseSprite() {
     private var isAttack = false
     private val paint = Paint()
     var size = SizeF(0f, 0f) // 玩家的尺寸
+    var grenade = 3 // 炸雷数量
 
     init {
         this.distance = 3f // 玩家的移动距离
@@ -199,6 +202,14 @@ object Player : BaseSprite() {
             EffectManager.obtainFlash().play(x, y, true) {
                 isShow = true
             }
+        }
+    }
+
+    fun sendBomb() {
+        if (grenade == 0) return
+        grenade--
+        EffectManager.obtainGrenade().play(this.x, this.y) {
+            StageManager.clearAllEnemy()
         }
     }
 

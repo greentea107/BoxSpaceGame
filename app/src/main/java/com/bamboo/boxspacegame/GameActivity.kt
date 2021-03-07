@@ -16,6 +16,7 @@ import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
+import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -83,6 +84,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initBackButton()
         initPauseButton()
         initFireButton()
+        initBombButton()
         initJumpButton()
         initBGMButton()
         initSFXButton()
@@ -123,6 +125,12 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 }
             }
             true
+        }
+    }
+
+    private fun initBombButton() {
+        btnBomb.setOnClickListener {
+            Player.sendBomb()
         }
     }
 

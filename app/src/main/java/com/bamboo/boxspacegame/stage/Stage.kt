@@ -87,7 +87,7 @@ class Stage {
      */
     @Synchronized
     private fun addEnemy() {
-        if((System.currentTimeMillis()-startMillis)<1000) return
+        if ((System.currentTimeMillis() - startMillis) < 1000) return
         if (listEnemy.size < enemyCount) {
             initEnemy(enemyHP, if (listEnemy.size % 5 == 0) 1 else 0)
             startMillis = System.currentTimeMillis()
@@ -148,5 +148,15 @@ class Stage {
 
     fun reset() {
         gameStatus = MISSION_FAILED
+    }
+
+    fun clearEnemy() {
+        listEnemy.filter { !it.free }.forEach {
+            it.free = true
+            it.HP = 0f
+            val cx = it.getRect().width().div(2)
+            val cy = it.getRect().height().div(2)
+            EffectManager.obtainBomb().play(it.x + cx, it.y + cy)
+        }
     }
 }

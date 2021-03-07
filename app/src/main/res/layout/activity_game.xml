@@ -193,6 +193,18 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/btnBomb"
+                style="@style/text_14_cyan"
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:background="@drawable/btn_single_color"
+                android:text="爆雷" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
                 android:id="@+id/btnFire"
                 style="@style/text_14_cyan"
                 android:layout_width="80dp"

@@ -115,4 +115,8 @@ object StageManager {
     fun getListEnemy() = stage?.getListEnemy()
 
     fun getCurrentStageNo() = this.currentStageNo
+
+    fun clearAllEnemy(){
+        stage?.clearEnemy()
+    }
 }
