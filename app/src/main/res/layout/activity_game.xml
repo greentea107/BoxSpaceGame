@@ -138,12 +138,12 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 app:arrowDark="@color/cyan_dark"
-                app:arrowLight="@color/cyan_line"
+                app:arrowLight="@color/gold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:padBackgroundColor="#3359"
                 app:showAxisArrow="true"
-                app:showHotSport="true" />
+                app:showHotSport="false" />
         </FrameLayout>
 
         <Space
