@@ -13,12 +13,32 @@ class GrenadeEffect : BaseEffect() {
     private var currentFrame = 0
     private var onFinished: (() -> Unit)? = null // 动画播放完毕后的回调函数
 
-    init {
-        paint.style = Paint.Style.FILL_AND_STROKE
-    }
-
     companion object {
         const val FRAME_COUNT = 16
+        fun init() {
+            val paint = Paint()
+            paint.color = Color.WHITE
+            repeat(FRAME_COUNT) {
+                val bmp = Bitmap.createBitmap(
+                    AppGobal.screenWidth,
+                    AppGobal.screenHeight,
+                    Bitmap.Config.ARGB_8888
+                )
+                Canvas(bmp).apply {
+                    paint.maskFilter = BlurMaskFilter(
+                        AppGobal.unitSize + it * it,
+                        BlurMaskFilter.Blur.SOLID
+                    )
+                    this.drawCircle(
+                        bmp.width / 2f,
+                        bmp.height / 2f,
+                        AppGobal.screenHeight / 3f,
+                        paint
+                    )
+                }
+                AppGobal.bmpCache.put(AppGobal.BMP_GRENADE + "_$it", bmp)
+            }
+        }
     }
 
     fun play(centerX: Float, centerY: Float, onFinished: (() -> Unit)?) {
@@ -36,6 +56,7 @@ class GrenadeEffect : BaseEffect() {
             onFinished?.let { it() }
         } else {
             val r = AppGobal.screenWidth / FRAME_COUNT * currentFrame
+            paint.style = Paint.Style.FILL
             paint.shader = RadialGradient(
                 centerX,
                 centerY,
@@ -47,8 +68,11 @@ class GrenadeEffect : BaseEffect() {
                     Color.parseColor("#66FFFFFF")
                 ), null, Shader.TileMode.CLAMP
             )
-            paint.color = Color.WHITE
             canvas.drawCircle(centerX, centerY, r.toFloat(), paint)
+            val bmp = AppGobal.bmpCache[AppGobal.BMP_GRENADE+"_$currentFrame"]
+            val cx = centerX - (bmp.width / 2)
+            val cy = centerY - (bmp.height / 2)
+            canvas.drawBitmap(bmp, cx, cy, null)
         }
     }
 

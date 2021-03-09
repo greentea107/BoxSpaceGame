@@ -10,8 +10,10 @@
 
     <!--  左侧布局  -->
     <LinearLayout
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center"
+        android:minWidth="130dp"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -156,18 +158,20 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:elevation="10dp" />
 
     <!--  右侧布局  -->
     <LinearLayout
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
+        android:minWidth="130dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="@android:color/holo_blue_light"
             android:shadowDx="3"
@@ -185,6 +189,15 @@
             android:layout_marginBottom="10dp"
             android:background="@color/cyan_line" />
 
+        <ProgressBar
+            android:id="@+id/progressBarPower"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:max="500"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_bar" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -192,13 +205,33 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnBomb"
-                style="@style/text_14_cyan"
-                android:layout_width="80dp"
-                android:layout_height="60dp"
-                android:background="@drawable/btn_single_color"
-                android:text="爆雷" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBomb"
+                    style="@style/text_14_cyan"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_single_color"
+                    android:text="爆雷" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="60dp" />
+
+                <Button
+                    android:id="@+id/btnJump"
+                    style="@style/text_14_cyan"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_single_color"
+                    android:text="瞬移" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
@@ -207,22 +240,11 @@
             <Button
                 android:id="@+id/btnFire"
                 style="@style/text_14_cyan"
-                android:layout_width="80dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/btn_single_color"
                 android:text="开火" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <Button
-                android:id="@+id/btnJump"
-                style="@style/text_14_cyan"
-                android:layout_width="80dp"
-                android:layout_height="60dp"
-                android:background="@drawable/btn_single_color"
-                android:text="瞬移" />
         </LinearLayout>
 
         <LinearLayout

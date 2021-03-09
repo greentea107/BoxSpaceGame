@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:background="@drawable/bg_main">
 
-    <TextView
-        android:id="@+id/tvRecord"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:paddingTop="10dp"
-        style="@style/text_14_cyan"
-        android:paddingBottom="10dp"
-        android:text="第0关 最快用时：---- 用时：---- " />
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/tvStageNo"
+            style="@style/text_14_cyan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="第0关 - " />
+
+        <TextView
+            android:id="@+id/tvFastestTime"
+            style="@style/text_14_white"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text=" 最快用时： ---- " />
+
+        <TextView
+            android:id="@+id/tvLastTime"
+            style="@style/text_14_cyan"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:text=" 上次用时： ---- " />
+    </LinearLayout>
 
     <View
         android:layout_width="wrap_content"

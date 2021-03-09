@@ -1,6 +1,7 @@
 package com.bamboo.boxspacegame.view
 
 import android.graphics.*
+import androidx.core.graphics.alpha
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.spirit.Player
 
@@ -32,6 +33,7 @@ object MapBackground {
         paint.color = Color.WHITE
         paint.strokeWidth = 1f
         val step = AppGobal.screenWidth / 20f
+        paint.color = Color.WHITE
         // 绘制四条往中心的短射线，呈现一种透视效果
         canvas.drawLine(0f, 0f, step, step, paint)
         canvas.drawLine(
@@ -51,15 +53,23 @@ object MapBackground {
             AppGobal.screenHeight - 1f - step,
             paint
         )
+        paint.color = Color.parseColor("#ECECFF")
+        paint.strokeWidth = 0.5f
         canvas.drawRect(
             RectF(
-                step, step,
+                step + 1f, step + 1f,
                 AppGobal.screenWidth - 1f - step,
                 AppGobal.screenHeight - 1f - step
             ),
             paint
         )
-        canvas.drawRect(0f, 0f, AppGobal.screenWidth - 1f, AppGobal.screenHeight - 1f, paint)
+        paint.color = Color.WHITE
+        paint.strokeWidth = 1f
+        paint.style = Paint.Style.STROKE
+        canvas.drawRect(
+            0f, 0f,
+            AppGobal.screenWidth - 1f, AppGobal.screenHeight - 1f, paint
+        )
     }
 
     private fun drawBackground(canvas: Canvas) {
@@ -69,7 +79,7 @@ object MapBackground {
         canvas.drawRect(r, paint) // 背景黑
 
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.color = Color.rgb(25, 150, 255)
+        paint.color = Color.parseColor("#5277D0")
         paint.maskFilter = BlurMaskFilter(AppGobal.unitSize / 2, BlurMaskFilter.Blur.OUTER)
         val rin = RectF(
             AppGobal.unitSize,
@@ -81,12 +91,6 @@ object MapBackground {
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 1f
-        // 屏幕白框
-        canvas.drawRect(
-            0f, 0f,
-            AppGobal.screenWidth - 1f, AppGobal.screenHeight - 1f,
-            paint
-        )
     }
 
     /**
@@ -107,20 +111,21 @@ object MapBackground {
             AppGobal.screenHeight / 2f,
             intArrayOf(Color.rgb(85, 130, 255), Color.BLACK), null, Shader.TileMode.CLAMP
         )
-        val inc = (AppGobal.screenHeight - AppGobal.unitSize * 2) / 20f
         repeat(20) {
-            val x = it * AppGobal.unitSize + AppGobal.unitSize + 1
+            val x = it * AppGobal.unitSize + AppGobal.unitSize
             canvas.drawLine(
                 x, AppGobal.unitSize,
                 x, AppGobal.screenHeight - AppGobal.unitSize,
                 paint
             )
-            val y = inc * it + AppGobal.unitSize + 1
-            canvas.drawLine(
-                AppGobal.unitSize, y + AppGobal.unitSize,
-                AppGobal.screenWidth - AppGobal.unitSize, y + AppGobal.unitSize,
-                paint
-            )
+            val y = it * AppGobal.unitSize + AppGobal.unitSize
+            if (y < AppGobal.screenHeight - AppGobal.unitSize) {
+                canvas.drawLine(
+                    AppGobal.unitSize, y,
+                    AppGobal.screenWidth - AppGobal.unitSize, y,
+                    paint
+                )
+            }
         }
     }
 }

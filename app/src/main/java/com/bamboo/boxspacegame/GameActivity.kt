@@ -7,16 +7,13 @@ import android.os.*
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.bamboo.boxspacegame.effect.BombEffect
-import com.bamboo.boxspacegame.effect.BulletEffect
-import com.bamboo.boxspacegame.effect.EffectManager
-import com.bamboo.boxspacegame.effect.FlashEffect
+import com.bamboo.boxspacegame.effect.*
 import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
-import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -35,7 +32,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initEventBus()
         initMediaPlayer()
         initSoundPool()
-        initButtons()
+        initViews()
     }
 
     override fun onPause() {
@@ -74,13 +71,16 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
         LiveEventBus.get(AppGobal.EVENT_CURRENT_TIME, Long::class.java).observe(this) {
             tvUseTime.text = "$it"
+            progressBarPower.progress = Player.power
+            btnBomb.isEnabled = Player.power == AppGobal.POWER_MAX
+            btnJump.isEnabled = Player.power >= 50
         }
         LiveEventBus.get(AppGobal.EVENT_GAME_OVER, Boolean::class.java).observe(this) {
             onBackPressed()
         }
     }
 
-    private fun initButtons() {
+    private fun initViews() {
         initBackButton()
         initPauseButton()
         initFireButton()
@@ -88,6 +88,8 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initJumpButton()
         initBGMButton()
         initSFXButton()
+        progressBarPower.max = AppGobal.POWER_MAX
+        progressBarPower.progress = 0
     }
 
     private fun initBackButton() {
@@ -235,6 +237,11 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     private fun initSurfaceView() {
+        AppGobal.screenHeight = resources.displayMetrics.heightPixels
+        AppGobal.screenWidth = AppGobal.screenHeight / 20 * 28
+        AppGobal.unitSize = AppGobal.screenWidth / 20f
+        surfaceView.layoutParams =
+            LinearLayout.LayoutParams(AppGobal.screenWidth, AppGobal.screenHeight)
         surfaceView.holder.let {
             it.setKeepScreenOn(true)
             it.addCallback(object : SurfaceHolder.Callback {
@@ -245,13 +252,11 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     height: Int
                 ) {
                     launch(Dispatchers.Default) {
-                        AppGobal.screenWidth = surfaceView.width
-                        AppGobal.screenHeight = surfaceView.height
-                        AppGobal.unitSize = AppGobal.screenWidth / 20f
                         MapBackground.init()
                         BulletEffect.init()
                         FlashEffect.init()
                         BombEffect.init()
+                        GrenadeEffect.init()
                         BulletManager.init(this@GameActivity)
                         Player.initScope(this@GameActivity)
                         StageManager.init(this@GameActivity)
@@ -271,7 +276,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     AppGobal.isRunning = true
                 }
 
-                override fun surfaceDestroyed(holder: SurfaceHolder) {}
+                override fun surfaceDestroyed(holder: SurfaceHolder) {
+                    AppGobal.isRunning = false
+                }
             })
         }
     }

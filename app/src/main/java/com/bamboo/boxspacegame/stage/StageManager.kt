@@ -71,10 +71,8 @@ object StageManager {
         listRecord[currentStageNo - 1].time = System.currentTimeMillis() - startMillis
         startMillis = System.currentTimeMillis()
         // 设置下一关的参数
-        BulletManager.damage += 2f // 子弹威力升级
         currentStageNo++
-        enemyCount++
-        enemyHP += 5f
+        enemyCount += 3 // 敌方数量增加
         stage?.let {
             it.setEnemyData(enemyCount, enemyHP)
             it.setPlayerLocation()
@@ -116,7 +114,7 @@ object StageManager {
 
     fun getCurrentStageNo() = this.currentStageNo
 
-    fun clearAllEnemy(){
+    fun clearAllEnemy() {
         stage?.clearEnemy()
     }
 }

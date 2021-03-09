@@ -21,7 +21,7 @@ object Player : BaseSprite() {
     private var isAttack = false
     private val paint = Paint()
     var size = SizeF(0f, 0f) // 玩家的尺寸
-    var grenade = 3 // 炸雷数量
+    var power = 50 // 能量值
 
     init {
         this.distance = 3f // 玩家的移动距离
@@ -51,6 +51,7 @@ object Player : BaseSprite() {
                 if (AppGobal.pause) continue
                 if (isAttack && isShow) {
                     BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)
+                    power++ // 子弹充能
                 }
                 delay(Bullet.INTERVAL) // 发射子弹的间隔
             }
@@ -179,6 +180,7 @@ object Player : BaseSprite() {
      * 发射子弹
      */
     fun sendBullet(isAttack: Boolean) {
+        if (AppGobal.pause) return
         Player.isAttack = isAttack
     }
 
@@ -190,7 +192,9 @@ object Player : BaseSprite() {
      */
     fun jump() {
         if (AppGobal.pause) return
+        if (power < 50) return
         isShow = false
+        power -= 50
         // 播放音效
         LiveEventBus.get(AppGobal.EVENT_FLASH_SFX).post(true)
         // 播放瞬移动画，在动画结束时移动玩家的坐标
@@ -205,11 +209,26 @@ object Player : BaseSprite() {
         }
     }
 
+    /**
+     * 发射爆雷
+     */
     fun sendBomb() {
-        if (grenade == 0) return
-        grenade--
-        EffectManager.obtainGrenade().play(this.x, this.y) {
-            StageManager.clearAllEnemy()
+        if (AppGobal.pause) return
+        // 如果能量低于最大值则不能使用
+        if (power < AppGobal.POWER_MAX) return
+        power = 0 // 使用完毕后能量清空
+        // 隐藏玩家后播放闪避动画，然后播放爆雷动画并清敌，最后再显示玩家
+        isShow = false
+        EffectManager.obtainFlash().play(x, y, false) {
+            EffectManager.obtainGrenade().play(
+                x + (size.width / 2),
+                y + (size.height / 2)
+            ) {
+                EffectManager.obtainFlash().play(x, y) {
+                    isShow = true
+                }
+            }
+            StageManager.clearAllEnemy() // 清敌
         }
     }
 

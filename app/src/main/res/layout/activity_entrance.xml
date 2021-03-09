@@ -12,13 +12,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_block"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
             android:src="@mipmap/ic_launcher" />
 
@@ -32,7 +35,7 @@
             android:shadowRadius="3"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:textStyle="bold|italic" />
 
         <ImageButton
@@ -47,7 +50,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="10dp"
         android:background="@color/cyan_line" />
 
@@ -63,14 +66,26 @@
             android:layout_weight="2"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/text_14_cyan"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/cyan_light"
-                android:padding="5dp"
-                android:textStyle="bold"
-                android:text="数据统计" />
+                android:background="@drawable/bg_block"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/cyan_line" />
+
+                <TextView
+                    style="@style/text_14_cyan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="数据统计"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -88,7 +103,8 @@
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@color/cyan_line" />
 
         <LinearLayout
@@ -114,12 +130,16 @@
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
             <Button
                 android:id="@+id/btnClearScore"
                 style="@style/text_14_cyan"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/btn_single_color"
                 android:text="重新计分" />
 
@@ -136,17 +156,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_block"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <Button
             android:id="@+id/btnEntrance"
             style="@style/text_14_cyan"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:background="@drawable/btn_single_color"
-            android:paddingStart="60dp"
-            android:paddingEnd="60dp"
+            android:paddingStart="70dp"
+            android:paddingEnd="70dp"
             android:text="开始游戏" />
     </LinearLayout>
 </LinearLayout>

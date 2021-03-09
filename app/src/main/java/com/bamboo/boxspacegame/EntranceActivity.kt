@@ -86,6 +86,7 @@ class EntranceActivity : AppCompatActivity() {
      * 初始化统计列表
      */
     private fun initRecyclerView() {
+        rvData.setHasFixedSize(true)
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun onCreateViewHolder(
@@ -102,8 +103,11 @@ class EntranceActivity : AppCompatActivity() {
                     val stageNo = it.stageNo
                     val fastestTime = it.fastestTime
                     val lastTime = it.time
-                    holder.itemView.tvRecord.text =
-                        "第${stageNo}关 最快用时：${fastestTime} 上次用时：${lastTime}"
+                    holder.itemView.let {
+                        it.tvStageNo.text = "第${stageNo}关 - "
+                        it.tvFastestTime.text = " 最快用时（毫秒）：${fastestTime}"
+                        it.tvLastTime.text = " 上次用时（毫秒）：${lastTime}"
+                    }
                 }
             }
 
