@@ -1,6 +1,10 @@
 package com.bamboo.boxspacegame
 
 import android.annotation.SuppressLint
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.media.MediaPlayer
 import android.media.SoundPool
 import android.os.*
@@ -252,6 +256,10 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     height: Int
                 ) {
                     launch(Dispatchers.Default) {
+                        val canvas = holder.lockCanvas()
+                        drawTitleString(canvas, "游戏加载中...")
+                        holder.unlockCanvasAndPost(canvas)
+
                         MapBackground.init()
                         BulletEffect.init()
                         FlashEffect.init()
@@ -283,4 +291,46 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    /**
+     * 绘制主标题和子标题，屏幕居中
+     */
+    fun drawTitleString(canvas: Canvas, subTitle: String) {
+        fun dp2px(dp: Float): Float {
+            return MyApp.context?.let {
+                dp * it.resources.displayMetrics.density + 0.5f
+            } ?: 0f
+        }
+
+        // 绘制主标题文字，屏幕居中偏上
+        val title = "Space Battle"
+        val rectTitle = Rect()
+        val paintTitle = Paint().apply {
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.color = Color.WHITE
+            this.textSize = dp2px(22f)
+            this.getTextBounds(title, 0, title.length - 1, rectTitle)
+        }
+        val titleX = (AppGobal.screenWidth - rectTitle.width()) / 2f
+        val titleY = AppGobal.screenHeight / 2f - dp2px(20f)
+        canvas.drawText(title, titleX, titleY, paintTitle)
+        // 绘制分隔线
+        canvas.drawLine(
+            AppGobal.screenWidth / 4f,
+            AppGobal.screenHeight / 2f,
+            AppGobal.screenWidth - (AppGobal.screenWidth / 4f),
+            AppGobal.screenHeight / 2f,
+            paintTitle
+        )
+        // 绘制子标题文字，屏幕居中偏下
+        val rectSubTitle = Rect()
+        val paintSubTitle = Paint().apply {
+            this.style = Paint.Style.FILL_AND_STROKE
+            this.color = Color.WHITE
+            this.textSize = dp2px(16f)
+            this.getTextBounds(subTitle, 0, subTitle.length - 1, rectSubTitle)
+        }
+        val subTitleX = (AppGobal.screenWidth - rectSubTitle.width()) / 2f
+        val subTitleY = AppGobal.screenHeight / 2f + dp2px(30f)
+        canvas.drawText(subTitle, subTitleX, subTitleY, paintSubTitle)
+    }
 }

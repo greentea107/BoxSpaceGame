@@ -1,16 +1,15 @@
 package com.bamboo.boxspacegame.stage
 
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.MyApp
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
-import com.bamboo.boxspacegame.spirit.BulletManager
-import com.bamboo.boxspacegame.utils.LogEx
 import com.jeremyliao.liveeventbus.LiveEventBus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * 关卡管理
