@@ -21,7 +21,7 @@ object Player : BaseSprite() {
     private var isAttack = false
     private val paint = Paint()
     var size = SizeF(0f, 0f) // 玩家的尺寸
-    var power = 50 // 能量值
+    var power = 250 // 能量值
 
     init {
         this.distance = 3f // 玩家的移动距离
@@ -51,7 +51,8 @@ object Player : BaseSprite() {
                 if (AppGobal.pause) continue
                 if (isAttack && isShow) {
                     BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)
-                    power++ // 子弹充能
+                    // 子弹充能
+                    if (power < AppGobal.POWER_MAX) power++
                 }
                 delay(Bullet.INTERVAL) // 发射子弹的间隔
             }

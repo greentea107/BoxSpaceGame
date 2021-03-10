@@ -33,7 +33,7 @@ object BulletManager {
     }
 
     fun send(x: Float, y: Float, angle: Float) {
-        obtain().send(x, y, angle, damage)
+        obtain().sendTargetEnmey(x, y, angle, damage)
     }
 
     fun draw(canvas: Canvas) {

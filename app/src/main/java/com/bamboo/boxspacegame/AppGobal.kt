@@ -9,6 +9,7 @@ object AppGobal {
     const val BMP_PLAYER = "player"
     const val BMP_FLASH = "flash"
     const val BMP_BOMB = "bomb"
+    const val BMP_BULLET = "bullet"
     const val BMP_GRENADE = "grenade"
     const val EVENT_STAGE_NO = "stageNo"
     const val EVENT_SCORE = "score"

@@ -8,8 +8,13 @@ import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlin.random.Random
 
+/**
+ * 子弹类
+ */
 class Bullet : BaseSprite() {
     private var size: Float = 0f
+    protected var target = "enemy" // 子弹要攻击的目标enemy：敌人，player：玩家
+
     var damage: Float = 2f // 伤害值
         set(value) {
             field = if (value <= 0f) 2f else value
@@ -22,7 +27,7 @@ class Bullet : BaseSprite() {
     init {
         this.distance = 7f
         this.size = Player.size.width / 2
-        val bmp = AppGobal.bmpCache["bullet"]
+        val bmp = AppGobal.bmpCache[AppGobal.BMP_BULLET]
         if (bmp == null) buildBitmap()
     }
 
@@ -42,7 +47,7 @@ class Bullet : BaseSprite() {
             )
             this.drawCircle(size / 2, size / 2, size / 2, paint)
         }
-        AppGobal.bmpCache.put("bullet", bmp)
+        AppGobal.bmpCache.put(AppGobal.BMP_BULLET, bmp)
     }
 
     @Synchronized
@@ -86,16 +91,17 @@ class Bullet : BaseSprite() {
     }
 
     override fun draw(canvas: Canvas) {
-        val bmp = AppGobal.bmpCache["bullet"]
+        val bmp = AppGobal.bmpCache[AppGobal.BMP_BULLET]
         canvas.drawBitmap(bmp, x - size / 2, y - size / 2, null)
     }
 
-    fun send(x: Float, y: Float, angle: Float, damage: Float) {
+    fun sendTargetEnmey(x: Float, y: Float, angle: Float, damage: Float) {
         this.free = false
         this.x = x
         this.y = y
         this.angle = angle
         this.damage = damage
+        this.target = "enemy"
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
     }
 }
