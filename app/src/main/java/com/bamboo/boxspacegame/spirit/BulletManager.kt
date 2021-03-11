@@ -92,4 +92,9 @@ object BulletManager {
     fun draw(canvas: Canvas) {
         listBullet.filter { !it.free }.forEach { it.draw(canvas) }
     }
+
+    @Synchronized
+    fun clearAll() {
+        listBullet.clear()
+    }
 }

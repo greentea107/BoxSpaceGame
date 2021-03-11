@@ -5,6 +5,7 @@ import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
+import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Enemy
 import com.bamboo.boxspacegame.spirit.Enemy2
 import com.bamboo.boxspacegame.spirit.Player
@@ -138,6 +139,7 @@ object StageManager {
             listRecord
         )
         currentStageNo = 1
+        BulletManager.clearAll()
         LiveEventBus.get(AppGobal.EVENT_GAME_OVER).post(true)
     }
 
@@ -211,10 +213,6 @@ object StageManager {
             startMillis = System.currentTimeMillis()
         }
     }
-
-//    fun drawAllEnemy(canvas: Canvas) {
-//        listEnemy.filter { !it.free }.forEach { it.draw(canvas) }
-//    }
 
     @Synchronized
     fun setEnemyData(enemyCount: Int, enemyHP: Float) {
