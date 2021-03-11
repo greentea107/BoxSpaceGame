@@ -28,6 +28,7 @@ class EntranceActivity : AppCompatActivity() {
         initButtons()
         initRecyclerView()
         initOptionAudio()
+        tvVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
     }
 
     /**

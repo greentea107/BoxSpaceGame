@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Space Battle</string>
     <string name="github">https://github.com/greentea107/BoxSpaceGame</string>
+    <string name="app_desc">游戏源码，仅供学习和研究</string>
 </resources>
