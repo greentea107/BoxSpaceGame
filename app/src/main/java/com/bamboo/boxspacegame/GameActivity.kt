@@ -63,7 +63,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onResume() {
         super.onResume()
-        if (chkBGM.isChecked) playBGM()
+        if (MyApp.isPlayBGM()) playBGM()
     }
 
     private fun initEventBus() {
@@ -91,8 +91,8 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initFireButton()
         initBombButton()
         initJumpButton()
-        initBGMButton()
-        initSFXButton()
+//        initBGMButton()
+//        initSFXButton()
         progressBarPower.max = AppGobal.POWER_MAX
         progressBarPower.progress = 0
     }
@@ -145,20 +145,20 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         btnJump.setOnClickListener { Player.jump() }
     }
 
-    private fun initBGMButton() {
-        chkBGM.isChecked = MyApp.isPlayBGM()
-        chkBGM.text = if (chkBGM.isChecked) "音乐：开" else "音乐：关"
-        chkBGM.setOnCheckedChangeListener { _, isChecked ->
-            if (!isChecked) {
-                stopBGM()
-                chkBGM.text = "音乐：关"
-            } else {
-                playBGM()
-                chkBGM.text = "音乐：开"
-            }
-            MyApp.saveSoundOption(isChecked, MyApp.isPlaySFX())
-        }
-    }
+//    private fun initBGMButton() {
+//        chkBGM.isChecked = MyApp.isPlayBGM()
+//        chkBGM.text = if (chkBGM.isChecked) "音乐：开" else "音乐：关"
+//        chkBGM.setOnCheckedChangeListener { _, isChecked ->
+//            if (!isChecked) {
+//                stopBGM()
+//                chkBGM.text = "音乐：关"
+//            } else {
+//                playBGM()
+//                chkBGM.text = "音乐：开"
+//            }
+//            MyApp.saveSoundOption(isChecked, MyApp.isPlaySFX())
+//        }
+//    }
 
     private fun playBGM() {
         if (mediaPlayer == null) initMediaPlayer()
@@ -170,14 +170,14 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         mediaPlayer = null
     }
 
-    private fun initSFXButton() {
-        chkSFX.isChecked = MyApp.isPlaySFX()
-        chkSFX.text = if (chkSFX.isChecked) "音效：开" else "音效：关"
-        chkSFX.setOnCheckedChangeListener { _, isChecked ->
-            chkSFX.text = if (isChecked) "音效：开" else "音效：关"
-            MyApp.saveSoundOption(MyApp.isPlayBGM(), isChecked)
-        }
-    }
+//    private fun initSFXButton() {
+//        chkSFX.isChecked = MyApp.isPlaySFX()
+//        chkSFX.text = if (chkSFX.isChecked) "音效：开" else "音效：关"
+//        chkSFX.setOnCheckedChangeListener { _, isChecked ->
+//            chkSFX.text = if (isChecked) "音效：开" else "音效：关"
+//            MyApp.saveSoundOption(MyApp.isPlayBGM(), isChecked)
+//        }
+//    }
 
     /**
      * 初始化背景音乐
@@ -197,15 +197,15 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         mapSound.put(2, soundPool.load(this, R.raw.bullet_sfx, 1))
         mapSound.put(3, soundPool.load(this, R.raw.flash_sfx, 1))
         LiveEventBus.get(AppGobal.EVENT_BOMB_SFX, Boolean::class.java).observe(this) {
-            if (chkSFX.text == "音效：开")
+            if (MyApp.isPlaySFX())
                 soundPool.play(mapSound[1], 1f, 1f, 0, 0, 1f)
         }
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX, Boolean::class.java).observe(this) {
-            if (chkSFX.text == "音效：开")
+            if (MyApp.isPlaySFX())
                 soundPool.play(mapSound[2], 1f, 1f, 0, 0, 1f)
         }
         LiveEventBus.get(AppGobal.EVENT_FLASH_SFX, Boolean::class.java).observe(this) {
-            if (chkSFX.text == "音效：开")
+            if (MyApp.isPlaySFX())
                 soundPool.play(mapSound[3], 1f, 1f, 0, 0, 1f)
         }
     }

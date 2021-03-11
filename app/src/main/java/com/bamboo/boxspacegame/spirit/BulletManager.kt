@@ -1,19 +1,23 @@
 package com.bamboo.boxspacegame.spirit
 
-import android.graphics.Canvas
+import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
-import com.bamboo.boxspacegame.utils.LogEx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.concurrent.CopyOnWriteArrayList
 
+/**
+ * 子弹管理类，以单例模式运行
+ * 管理类内部有一个集合，用于保存所有的玩家和敌人发射的子弹
+ * 如果子弹击中目标或越界后就将该对象设为空闲，以便于下回使用而不再频繁的创建对象
+ */
 object BulletManager {
     private val listBullet = mutableListOf<Bullet>()
-    var damage: Float = 3f
 
     fun init(scope: CoroutineScope) {
+        buildBitmapPlayer()
+        buildBitmapEnemy()
         scope.launch(Dispatchers.Default) {
             while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
@@ -23,6 +27,51 @@ object BulletManager {
         }
     }
 
+    private fun buildBitmapPlayer() {
+        val size = Player.size.width.toInt() / 2
+        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        Canvas(bmp).apply {
+            val paint = Paint()
+            paint.style = Paint.Style.FILL
+            paint.shader = RadialGradient(
+                size / 2f, size / 2f, size / 4f,
+                intArrayOf(
+                    Color.parseColor("#EDAF32"),
+                    Color.parseColor("#FFEFA2"),
+                    Color.parseColor("#56FFFFFF")
+                ),
+                floatArrayOf(0.1f, 0.5f, 0.8f),
+                Shader.TileMode.CLAMP
+            )
+            this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
+        }
+        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_PLAYER, bmp)
+    }
+
+    private fun buildBitmapEnemy() {
+        val size = Player.size.width.toInt() / 2
+        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        Canvas(bmp).apply {
+            val paint = Paint()
+            paint.style = Paint.Style.FILL
+            paint.shader = RadialGradient(
+                size / 2f, size / 2f, size / 4f,
+                intArrayOf(
+                    Color.parseColor("#82B4F5"),
+                    Color.parseColor("#FFEFA2"),
+                    Color.parseColor("#56FFFFFF")
+                ),
+                floatArrayOf(0.1f, 0.5f, 0.8f),
+                Shader.TileMode.CLAMP
+            )
+            this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
+        }
+        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_ENEMY, bmp)
+    }
+
+    /**
+     * 从集合中找出一个空闲的对象，如果没有空闲的就创建一个并返回
+     */
     private fun obtain(): Bullet {
         val bullet = listBullet.find { it.free }
         return if (bullet == null) {
@@ -32,16 +81,15 @@ object BulletManager {
         } else bullet
     }
 
-    fun send(x: Float, y: Float, angle: Float) {
-        obtain().sendTargetEnmey(x, y, angle, damage)
+    fun sendTargetEnemy(x: Float, y: Float, angle: Float) {
+        obtain().sendTargetEnmey(x, y, angle, 3f)
+    }
+
+    fun sendTargetPlayer(x: Float, y: Float, angle: Float) {
+        obtain().sendTargetPlayer(x, y, angle, 30f)
     }
 
     fun draw(canvas: Canvas) {
         listBullet.filter { !it.free }.forEach { it.draw(canvas) }
-    }
-
-    @Synchronized
-    fun release() {
-        listBullet.clear()
     }
 }

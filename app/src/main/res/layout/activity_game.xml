@@ -247,38 +247,5 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/chkBGM"
-                style="@style/text_10_cyan"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_single_color"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="音乐：开" />
-
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="match_parent" />
-
-            <CheckBox
-                android:id="@+id/chkSFX"
-                style="@style/text_10_cyan"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_single_color"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="音效：开" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -6,14 +6,12 @@ import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
-import kotlin.random.Random
 
 /**
  * 子弹类
  */
 class Bullet : BaseSprite() {
-    private var size: Float = 0f
-    protected var target = "enemy" // 子弹要攻击的目标enemy：敌人，player：玩家
+    private var target = AppGobal.TARGET_ENEMY // 子弹要攻击的目标enemy：敌人，player：玩家
 
     var damage: Float = 2f // 伤害值
         set(value) {
@@ -24,49 +22,34 @@ class Bullet : BaseSprite() {
         const val INTERVAL = 150L // 子弹的间隔
     }
 
-    init {
-        this.distance = 7f
-        this.size = Player.size.width / 2
-        val bmp = AppGobal.bmpCache[AppGobal.BMP_BULLET]
-        if (bmp == null) buildBitmap()
-    }
-
-    private fun buildBitmap() {
-        val bmp = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
-        Canvas(bmp).apply {
-            val paint = Paint()
-            paint.style = Paint.Style.FILL
-            paint.shader = RadialGradient(
-                size / 2, size / 2, size / 4, intArrayOf(
-                    Color.WHITE,
-                    Color.parseColor("#FFEFA2"),
-                    Color.parseColor("#56FFFFFF")
-                ),
-                floatArrayOf(0.1f, 0.5f, 0.8f),
-                Shader.TileMode.CLAMP
-            )
-            this.drawCircle(size / 2, size / 2, size / 2, paint)
-        }
-        AppGobal.bmpCache.put(AppGobal.BMP_BULLET, bmp)
-    }
-
     @Synchronized
     override fun move() {
         val pt = MathUtils.getCoordsByAngle(distance, angle.toDouble(), PointF(x, y))
         x = pt.x
         y = pt.y
-        // 判断子弹是否击中敌人
-        StageManager.getListEnemy()
-            ?.find {
-                !it.free && it.getRect().contains(x, y)
-            }
-            ?.let {
-                // 如果击中敌人则将子弹设为空闲并播放子弹特效
+        // 判断子弹的目标
+        if (target == AppGobal.TARGET_ENEMY) {
+            // 处理子弹的目标是敌人的情况
+            StageManager.getListEnemy()
+                ?.find {
+                    !it.free && it.getRect().contains(x, y)
+                }
+                ?.let {
+                    // 如果击中敌人则将子弹设为空闲并播放子弹特效
+                    free = true
+                    it.hit(this)
+                    EffectManager.obtainBullet().play(x, y)
+                    return
+                }
+        } else {
+            // 处理子弹的目标是玩家的情况
+            if (Player.getRect().contains(x, y)) {
                 free = true
+                Player.beHit(this)
                 EffectManager.obtainBullet().play(x, y)
-                it.hit(this)
                 return
             }
+        }
         // 判断子弹是否越界，越界就释放
         if (x <= AppGobal.unitSize / 2) {
             x = AppGobal.unitSize / 2
@@ -91,17 +74,45 @@ class Bullet : BaseSprite() {
     }
 
     override fun draw(canvas: Canvas) {
-        val bmp = AppGobal.bmpCache[AppGobal.BMP_BULLET]
-        canvas.drawBitmap(bmp, x - size / 2, y - size / 2, null)
+        val keyBmp = if (target == AppGobal.TARGET_PLAYER)
+            AppGobal.BMP_BULLET_PLAYER else AppGobal.BMP_BULLET_ENEMY
+        val bmp = AppGobal.bmpCache[keyBmp]
+        canvas.drawBitmap(bmp, x - bmp.width / 2, y - bmp.height / 2, null)
     }
 
+    /**
+     * 由玩家发射的子弹
+     * @param x 子弹的起始X轴
+     * @param y 子弹的起始Y轴
+     * @param angle 子弹移动的角度
+     * @param damage 子弹的伤害值
+     */
     fun sendTargetEnmey(x: Float, y: Float, angle: Float, damage: Float) {
         this.free = false
         this.x = x
         this.y = y
         this.angle = angle
         this.damage = damage
-        this.target = "enemy"
+        this.target = AppGobal.TARGET_ENEMY
+        this.distance = 7f
+        LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
+    }
+
+    /**
+     * 由敌人发射的子弹
+     * @param x 子弹的起始X轴
+     * @param y 子弹的起始Y轴
+     * @param angle 子弹移动的角度
+     * @param damage 子弹的伤害值
+     */
+    fun sendTargetPlayer(x: Float, y: Float, angle: Float, damage: Float) {
+        this.free = false
+        this.x = x
+        this.y = y
+        this.angle = angle
+        this.damage = damage
+        this.target = AppGobal.TARGET_PLAYER
+        this.distance = 3f
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
     }
 }

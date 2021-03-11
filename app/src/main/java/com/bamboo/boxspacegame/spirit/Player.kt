@@ -6,7 +6,6 @@ import androidx.core.graphics.withRotation
 import com.bamboo.boxspacegame.AppGobal
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
-import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.coroutines.CoroutineScope
@@ -21,9 +20,10 @@ object Player : BaseSprite() {
     private var isAttack = false
     private val paint = Paint()
     var size = SizeF(0f, 0f) // 玩家的尺寸
-    var power = 250 // 能量值
+    var power = 0 // 能量值
 
     init {
+        this.power = 60 // 能量的初始值
         this.distance = 3f // 玩家的移动距离
         // 设置精灵的尺寸为SurfaceView的1/20
         this.size = SizeF(AppGobal.unitSize, AppGobal.unitSize)
@@ -50,7 +50,11 @@ object Player : BaseSprite() {
             while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 if (isAttack && isShow) {
-                    BulletManager.send(size.width / 2 + x, size.height / 2 + y, lockAngle)
+                    BulletManager.sendTargetEnemy(
+                        size.width / 2 + x,
+                        size.height / 2 + y,
+                        lockAngle
+                    )
                     // 子弹充能
                     if (power < AppGobal.POWER_MAX) power++
                 }
@@ -237,4 +241,24 @@ object Player : BaseSprite() {
      * 获取玩家在屏幕上的矩形
      */
     fun getRect() = RectF(x, y, x + size.width, y + size.height)
+
+    /**
+     * 玩家被打击
+     */
+    fun beHit(bullet: Bullet) {
+        power -= bullet.damage.toInt()
+        if (power <= 0) {
+            shotDown()
+        }
+    }
+
+    /**
+     * 玩家被击落
+     */
+    fun shotDown() {
+        Player.isShow = false
+        EffectManager.obtainBomb().play(Player.x + size.width, Player.y + size.height) {
+            StageManager.gameStatus = StageManager.STATUS_MISSION_FAILED
+        }
+    }
 }

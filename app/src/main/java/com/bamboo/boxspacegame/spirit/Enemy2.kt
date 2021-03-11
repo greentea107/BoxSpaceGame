@@ -12,11 +12,12 @@ import java.util.*
 class Enemy2 : Enemy() {
     private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
+    private var attackStartTime = System.currentTimeMillis()
+    private var attackDelay = 1000L
 
     init {
         this.distance = 5f
         this.HP = 10f
-        this.score = 2
         bmpEnemy = AppGobal.bmpCache[AppGobal.BMP_ENEMY_2]
         if (bmpEnemy == null) buildBmp()
     }
@@ -131,5 +132,21 @@ class Enemy2 : Enemy() {
             x + AppGobal.unitSize / 2, y + AppGobal.unitSize / 2,
             AppGobal.unitSize / 2.5f, paint
         )
+    }
+
+    /**
+     * 向玩家的位置发射子弹
+     */
+    fun sendBullet() {
+        // 根据当前时间和射击延时判断是否可以发射子弹
+        if (System.currentTimeMillis() - attackStartTime >= attackDelay) {
+            val ex = if (bmpEnemy != null) bmpEnemy!!.width / 2 + x else x
+            val ey = if (bmpEnemy != null) bmpEnemy!!.height / 2 + y else y
+            val px = Player.size.width / 2 + Player.x
+            val py = Player.size.height / 2 + Player.y
+            val angle = MathUtils.getAngle(ex, ey, px, py).toFloat()
+            BulletManager.sendTargetPlayer(ex, ey, angle)
+            attackStartTime = System.currentTimeMillis()
+        }
     }
 }

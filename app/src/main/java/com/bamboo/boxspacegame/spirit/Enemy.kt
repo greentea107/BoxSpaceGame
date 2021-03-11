@@ -11,7 +11,7 @@ import java.util.*
 open class Enemy : BaseSprite() {
     private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
-    protected var score = 1
+//    protected var score = 1
 
     init {
         this.distance = 3f
@@ -160,12 +160,11 @@ open class Enemy : BaseSprite() {
             val cx = bmpEnemy?.width?.div(2) ?: 0
             val cy = bmpEnemy?.height?.div(2) ?: 0
             EffectManager.obtainBomb().play(x + cx, y + cy)
-            LiveEventBus.get(AppGobal.EVENT_SCORE).post(score)
         } else {
             this.HP -= bullet.damage
         }
         // 敌机被击中时再随机的往某个角度发射子弹，在视觉上作出子弹反弹的效果
         val bulletAngle = angle + Random().nextInt(360).toFloat()
-        BulletManager.send(bullet.x, bullet.y, bulletAngle)
+        BulletManager.sendTargetEnemy(bullet.x, bullet.y, bulletAngle)
     }
 }
