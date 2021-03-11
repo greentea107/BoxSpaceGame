@@ -6,10 +6,10 @@
         android:height="24dp" />
     <corners android:radius="12dp" />
     <gradient
-        android:endColor="@color/cyan_light"
-        android:startColor="@color/cyan_light" />
+        android:endColor="@color/blue_light"
+        android:startColor="@color/blue_light" />
     <stroke
         android:width="0.5dp"
-        android:color="@color/cyan_line" />
+        android:color="@color/blue_line" />
 
 </shape>

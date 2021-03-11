@@ -12,8 +12,8 @@ import java.util.*
 class Enemy2 : Enemy() {
     private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
-    private var attackStartTime = System.currentTimeMillis()
-    private var attackDelay = 1000L
+    private var lastAttackTime = 0L // 上次开火的时间
+    private var attackDelay = 1500L // 开火的时间间隔
 
     init {
         this.distance = 5f
@@ -139,14 +139,14 @@ class Enemy2 : Enemy() {
      */
     fun sendBullet() {
         // 根据当前时间和射击延时判断是否可以发射子弹
-        if (System.currentTimeMillis() - attackStartTime >= attackDelay) {
+        if (System.currentTimeMillis() - lastAttackTime >= attackDelay) {
             val ex = if (bmpEnemy != null) bmpEnemy!!.width / 2 + x else x
             val ey = if (bmpEnemy != null) bmpEnemy!!.height / 2 + y else y
             val px = Player.size.width / 2 + Player.x
             val py = Player.size.height / 2 + Player.y
             val angle = MathUtils.getAngle(ex, ey, px, py).toFloat()
             BulletManager.sendTargetPlayer(ex, ey, angle)
-            attackStartTime = System.currentTimeMillis()
+            lastAttackTime = System.currentTimeMillis()
         }
     }
 }

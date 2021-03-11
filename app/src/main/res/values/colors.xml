@@ -7,9 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="cyan_line">#5277D0</color>
-    <color name="cyan_light">#223E88</color>
-    <color name="cyan_dark">#232D4B</color>
-    <color name="cyan_text">#82B4F5</color>
+    <color name="blue_line">#5277D0</color>
+    <color name="blue_light">#223E88</color>
+    <color name="blue_dark2">#22316C</color>
+    <color name="blue_dark">#232D4B</color>
+    <color name="blue_text">#82B4F5</color>
     <color name="gold">#EDAF32</color>
 </resources>

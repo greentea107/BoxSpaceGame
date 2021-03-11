@@ -4,7 +4,7 @@
         <shape>
             <stroke
                 android:width="0.5dp"
-                android:color="@color/cyan_line" />
+                android:color="@color/blue_line" />
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress">
@@ -12,8 +12,8 @@
             <shape>
                 <stroke
                     android:width="0.5dp"
-                    android:color="@color/cyan_line" />
-                <solid android:color="@color/cyan_light" />
+                    android:color="@color/blue_line" />
+                <solid android:color="@color/blue_light" />
             </shape>
         </clip>
     </item>

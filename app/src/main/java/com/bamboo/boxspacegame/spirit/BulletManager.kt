@@ -27,28 +27,10 @@ object BulletManager {
         }
     }
 
+    /**
+     * 绘制玩家使用的位图
+     */
     private fun buildBitmapPlayer() {
-        val size = Player.size.width.toInt() / 2
-        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        Canvas(bmp).apply {
-            val paint = Paint()
-            paint.style = Paint.Style.FILL
-            paint.shader = RadialGradient(
-                size / 2f, size / 2f, size / 4f,
-                intArrayOf(
-                    Color.parseColor("#EDAF32"),
-                    Color.parseColor("#FFEFA2"),
-                    Color.parseColor("#56FFFFFF")
-                ),
-                floatArrayOf(0.1f, 0.5f, 0.8f),
-                Shader.TileMode.CLAMP
-            )
-            this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
-        }
-        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_PLAYER, bmp)
-    }
-
-    private fun buildBitmapEnemy() {
         val size = Player.size.width.toInt() / 2
         val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         Canvas(bmp).apply {
@@ -60,6 +42,30 @@ object BulletManager {
                     Color.parseColor("#82B4F5"),
                     Color.parseColor("#FFEFA2"),
                     Color.parseColor("#56FFFFFF")
+                ),
+                floatArrayOf(0.1f, 0.5f, 0.8f),
+                Shader.TileMode.CLAMP
+            )
+            this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
+        }
+        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_PLAYER, bmp)
+    }
+
+    /**
+     * 绘制敌方使用的子弹位图
+     */
+    private fun buildBitmapEnemy() {
+        val size = Player.size.width.toInt() / 2
+        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        Canvas(bmp).apply {
+            val paint = Paint()
+            paint.style = Paint.Style.FILL
+            paint.shader = RadialGradient(
+                size / 2f, size / 2f, size / 4f,
+                intArrayOf(
+                    Color.parseColor("#3282F5"),
+                    Color.parseColor("#A2EFFF"),
+                    Color.parseColor("#5633CAFF")
                 ),
                 floatArrayOf(0.1f, 0.5f, 0.8f),
                 Shader.TileMode.CLAMP

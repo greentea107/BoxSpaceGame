@@ -70,7 +70,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/cyan_line" />
+                android:background="@color/blue_line" />
 
             <TableRow>
 
@@ -95,7 +95,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/cyan_line" />
+                android:background="@color/blue_line" />
 
             <TableRow>
 
@@ -120,7 +120,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/cyan_line" />
+                android:background="@color/blue_line" />
         </TableLayout>
 
         <Space
@@ -137,7 +137,7 @@
                 android:id="@+id/rocker"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                app:arrowDark="@color/cyan_dark"
+                app:arrowDark="@color/blue_dark"
                 app:arrowLight="@color/gold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -187,7 +187,7 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/cyan_line" />
+            android:background="@color/blue_line" />
 
         <ProgressBar
             android:id="@+id/progressBarPower"

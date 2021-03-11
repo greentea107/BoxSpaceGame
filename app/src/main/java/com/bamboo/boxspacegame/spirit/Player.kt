@@ -23,7 +23,6 @@ object Player : BaseSprite() {
     var power = 0 // 能量值
 
     init {
-        this.power = 60 // 能量的初始值
         this.distance = 3f // 玩家的移动距离
         // 设置精灵的尺寸为SurfaceView的1/20
         this.size = SizeF(AppGobal.unitSize, AppGobal.unitSize)
@@ -35,6 +34,7 @@ object Player : BaseSprite() {
     }
 
     fun initScope(scope: CoroutineScope) {
+        this.power = 60 // 能量的初始值
         // 由于玩家的移动是连续的，所以需要通过循环来实现
         scope.launch(Dispatchers.Default) {
             while (AppGobal.isRunning) {
@@ -258,7 +258,7 @@ object Player : BaseSprite() {
     fun shotDown() {
         Player.isShow = false
         EffectManager.obtainBomb().play(Player.x + size.width, Player.y + size.height) {
-            StageManager.gameStatus = StageManager.STATUS_MISSION_FAILED
+            StageManager.gameStatus = StageManager.STATE_MISSION_FAILED
         }
     }
 }

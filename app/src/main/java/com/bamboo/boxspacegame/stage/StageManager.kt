@@ -19,17 +19,17 @@ import java.util.*
  */
 object StageManager {
     // 游戏状态
-    const val STATUS_READY = 0 // 准备阶段
-    const val STATUS_PLAYING = 1 // 进行中
-    const val STATUS_MISSION_FAILED = 2 // 失败
-    const val STATUS_MISSION_COMPLETED = 3 // 过关
+    const val STATE_READY = 0 // 准备阶段
+    const val STATE_PLAYING = 1 // 进行中
+    const val STATE_MISSION_FAILED = 2 // 失败
+    const val STATE_MISSION_COMPLETED = 3 // 过关
     private var currentStageNo = 1 // 当前的关卡数
     private var enemyCount = 5 // 初始的敌人数量
     private var enemyHP = 10f // 初始的敌人的HP量
     private var startMillis = 0L
     private val listRecord = mutableListOf<RecordBean>()
     private val listEnemy = mutableListOf<Enemy>()
-    var gameStatus = STATUS_READY
+    var gameStatus = STATE_READY
 
     fun init(scope: CoroutineScope) {
         currentStageNo = 1
@@ -46,16 +46,16 @@ object StageManager {
             while (AppGobal.isRunning) {
                 if (AppGobal.pause) continue
                 when (gameStatus) {
-                    STATUS_READY -> { // 准备阶段
+                    STATE_READY -> { // 准备阶段
                         onReady()
                     }
-                    STATUS_PLAYING -> { // 关卡进行中
+                    STATE_PLAYING -> { // 关卡进行中
                         onPlaying()
                     }
-                    STATUS_MISSION_COMPLETED -> { // 通关成功
+                    STATE_MISSION_COMPLETED -> { // 通关成功
                         onMissionComplete()
                     }
-                    STATUS_MISSION_FAILED -> { // 通关失败
+                    STATE_MISSION_FAILED -> { // 通关失败
                         onMissionFailed()
                     }
                 }
@@ -164,7 +164,7 @@ object StageManager {
      */
     @Synchronized
     fun setPlayerLocation() {
-        gameStatus = STATUS_READY
+        gameStatus = STATE_READY
         // 设置玩家登场
         Player.isShow = false
         EffectManager.obtainFlash().play(Player.x, Player.y, true) {
@@ -177,7 +177,7 @@ object StageManager {
                     it.x = cx
                     it.y = cy
                 }
-                gameStatus = STATUS_PLAYING
+                gameStatus = STATE_PLAYING
             }
         }
     }
@@ -198,7 +198,7 @@ object StageManager {
         }
         // 判断敌方是否全部消灭
         if (listEnemy.count { it.free && it.HP <= 0 } == enemyCount) {
-            gameStatus = STATUS_MISSION_COMPLETED
+            gameStatus = STATE_MISSION_COMPLETED
         }
     }
 
@@ -218,7 +218,7 @@ object StageManager {
     fun setEnemyData(enemyCount: Int, enemyHP: Float) {
         this.enemyCount = enemyCount
         this.enemyHP = enemyHP
-        gameStatus = STATUS_READY
+        gameStatus = STATE_READY
         listEnemy.clear()
     }
 
