@@ -26,9 +26,9 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:paddingEnd="10dp"
             android:shadowColor="@android:color/holo_blue_light"
             android:shadowDx="3"
             android:shadowDy="3"
@@ -37,6 +37,17 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold|italic" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:autoLink="all"
+            android:text="@string/github"
+            android:textColorLink="@color/blue_text"
+            android:textSize="12sp" />
 
         <ImageButton
             android:id="@+id/ibtnExit"
@@ -50,7 +61,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@color/blue_line" />
 
@@ -150,7 +161,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/blue_line" />
 
     <LinearLayout

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Space Battle</string>
+    <string name="github">https://github.com/greentea107/BoxSpaceGame</string>
 </resources>
