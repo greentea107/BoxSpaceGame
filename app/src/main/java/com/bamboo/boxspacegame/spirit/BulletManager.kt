@@ -39,7 +39,7 @@ object BulletManager {
             paint.shader = RadialGradient(
                 size / 2f, size / 2f, size / 4f,
                 intArrayOf(
-                    Color.parseColor("#82B4F5"),
+                    Color.parseColor("#FFFFFF"),
                     Color.parseColor("#FFEFA2"),
                     Color.parseColor("#56FFFFFF")
                 ),

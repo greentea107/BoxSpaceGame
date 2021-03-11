@@ -19,22 +19,24 @@ import com.bamboo.boxspacegame.utils.LogEx
 import kotlinx.android.synthetic.main.activity_entrance.*
 import kotlinx.android.synthetic.main.item_record.view.*
 
+/**
+ * 游戏入口界面
+ */
 class EntranceActivity : AppCompatActivity() {
     private val listRecord = mutableListOf<RecordBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entrance)
-        initLogo()
+        initLogoAndVersion()
         initButtons()
         initRecyclerView()
         initOptionAudio()
-        tvVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
     }
 
     /**
      * 用代码生成图标
      */
-    private fun initLogo() {
+    private fun initLogoAndVersion() {
         ivLogo.post {
             val bmp = Bitmap.createBitmap(ivLogo.width, ivLogo.height, Bitmap.Config.ARGB_8888)
             Canvas(bmp).apply {
@@ -68,6 +70,7 @@ class EntranceActivity : AppCompatActivity() {
             }
             ivLogo.setImageBitmap(bmp)
         }
+        tvVersion.text = "ver ${packageManager.getPackageInfo(packageName, 0).versionName}"
     }
 
     private fun initButtons() {

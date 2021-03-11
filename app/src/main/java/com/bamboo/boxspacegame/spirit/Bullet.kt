@@ -75,7 +75,7 @@ class Bullet : BaseSprite() {
 
     override fun draw(canvas: Canvas) {
         val keyBmp = if (target == AppGobal.TARGET_PLAYER)
-            AppGobal.BMP_BULLET_PLAYER else AppGobal.BMP_BULLET_ENEMY
+            AppGobal.BMP_BULLET_ENEMY else AppGobal.BMP_BULLET_PLAYER
         val bmp = AppGobal.bmpCache[keyBmp]
         canvas.drawBitmap(bmp, x - bmp.width / 2, y - bmp.height / 2, null)
     }
