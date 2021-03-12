@@ -87,12 +87,12 @@ class Bullet : BaseSprite() {
      * @param angle 子弹移动的角度
      * @param damage 子弹的伤害值
      */
-    fun sendTargetEnmey(x: Float, y: Float, angle: Float, damage: Float) {
+    fun sendTargetEnmey(x: Float, y: Float, angle: Float) {
         this.free = false
         this.x = x
         this.y = y
         this.angle = angle
-        this.damage = damage
+        this.damage = 3f
         this.target = AppGobal.TARGET_ENEMY
         this.distance = 7f
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
@@ -105,14 +105,14 @@ class Bullet : BaseSprite() {
      * @param angle 子弹移动的角度
      * @param damage 子弹的伤害值
      */
-    fun sendTargetPlayer(x: Float, y: Float, angle: Float, damage: Float) {
+    fun sendTargetPlayer(x: Float, y: Float, angle: Float) {
         this.free = false
         this.x = x
         this.y = y
         this.angle = angle
-        this.damage = damage
+        this.damage = 30f
         this.target = AppGobal.TARGET_PLAYER
-        this.distance = 3f
+        this.distance = 2f
         LiveEventBus.get(AppGobal.EVENT_BULLET_SFX).post(true)
     }
 }

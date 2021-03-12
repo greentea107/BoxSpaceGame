@@ -60,7 +60,8 @@
                 android:singleLine="true"
                 android:text="@string/github"
                 android:textColorLink="@color/blue_text"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="italic" />
         </LinearLayout>
 
         <ImageButton
@@ -140,8 +141,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_block"
                 android:layout_marginBottom="5dp"
+                android:background="@drawable/bg_block"
                 android:orientation="horizontal">
 
                 <View
@@ -174,6 +175,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:text="音效"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/track" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchEnemyAttack"
+                style="@style/text_14_cyan"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="允许敌人开火"
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
 

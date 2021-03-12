@@ -35,6 +35,19 @@ class MyApp : Application() {
         fun isPlaySFX() = context?.getSharedPreferences("audio", Context.MODE_PRIVATE)
             ?.getBoolean("sfx", true)
             ?: true
+
+        /**
+         * 是否允许敌人开火
+         */
+        fun saveEnableEnemyAttack(isEnable: Boolean) {
+            context?.getSharedPreferences("enemy_attack", Context.MODE_PRIVATE)
+                ?.edit { this.putBoolean("enable_attack", isEnable) }
+        }
+
+        fun isEnableEnemyAttack() =
+            context?.getSharedPreferences("enemy_attack", Context.MODE_PRIVATE)
+                ?.getBoolean("enable_attack", false)
+                ?: true
     }
 
     override fun onCreate() {

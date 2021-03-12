@@ -34,7 +34,7 @@ object Player : BaseSprite() {
     }
 
     fun initScope(scope: CoroutineScope) {
-        this.power = 60 // 能量的初始值
+        this.power = AppGobal.POWER_MAX / 2 // 能量的初始值
         // 由于玩家的移动是连续的，所以需要通过循环来实现
         scope.launch(Dispatchers.Default) {
             while (AppGobal.isRunning) {

@@ -245,10 +245,13 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         AppGobal.screenHeight = resources.displayMetrics.heightPixels
         AppGobal.screenWidth = AppGobal.screenHeight / 20 * 28
         AppGobal.unitSize = AppGobal.screenWidth / 20f
-        surfaceView.layoutParams =
-            LinearLayout.LayoutParams(AppGobal.screenWidth, AppGobal.screenHeight)
+        // 调整SurfaceView的大小
+        surfaceView.layoutParams = LinearLayout.LayoutParams(
+            AppGobal.screenWidth,
+            AppGobal.screenHeight
+        )
         surfaceView.holder.let {
-            it.setKeepScreenOn(true)
+            it.setKeepScreenOn(true) // 保存屏幕常亮
             it.addCallback(object : SurfaceHolder.Callback {
                 override fun surfaceChanged(
                     holder: SurfaceHolder,
@@ -268,9 +271,10 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         GrenadeEffect.init()
                         BulletManager.init(this@GameActivity)
                         Player.initScope(this@GameActivity)
-                        StageManager.init(this@GameActivity)
+                        StageManager.init(this@GameActivity,MyApp.isEnableEnemyAttack())
                         while (AppGobal.isRunning) {
                             val canvas = holder.lockCanvas()
+                            val startMillis = System.currentTimeMillis()
                             MapBackground.draw(canvas)
                             StageManager.draw(canvas)
                             BulletManager.draw(canvas)

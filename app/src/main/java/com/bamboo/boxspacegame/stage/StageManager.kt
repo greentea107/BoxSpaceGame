@@ -26,15 +26,17 @@ object StageManager {
     private var currentStageNo = 1 // 当前的关卡数
     private var enemyCount = 5 // 初始的敌人数量
     private var enemyHP = 10f // 初始的敌人的HP量
-    private var startMillis = 0L
-    private val listRecord = mutableListOf<RecordBean>()
-    private val listEnemy = mutableListOf<Enemy>()
-    var gameStatus = STATE_READY
+    private var enableEnemyAttack = true // 是否允许敌人开火
+    private var stageStartMillis = 0L // 记录关卡的起始时间
+    private val listRecord = mutableListOf<RecordBean>() // 记录各关的通关时间
+    private val listEnemy = mutableListOf<Enemy>() // 保存各关的敌人
+    var gameStatus = STATE_READY // 游戏状态
 
-    fun init(scope: CoroutineScope) {
+    fun init(scope: CoroutineScope, isEnableEnemyAttack: Boolean) {
         currentStageNo = 1
         enemyCount = 5
         enemyHP = 10f
+        enableEnemyAttack = isEnableEnemyAttack
         // 从本地读取各关的记录
         listRecord.clear()
         listRecord += RecordManager.loadStageRecord()
@@ -115,11 +117,11 @@ object StageManager {
         // 保存关卡的记录
         RecordManager.saveStageRecord(
             currentStageNo,
-            startMillis, System.currentTimeMillis(),
+            stageStartMillis, System.currentTimeMillis(),
             listRecord
         )
-        listRecord[currentStageNo - 1].time = System.currentTimeMillis() - startMillis
-        startMillis = System.currentTimeMillis()
+        listRecord[currentStageNo - 1].time = System.currentTimeMillis() - stageStartMillis
+        stageStartMillis = System.currentTimeMillis()
         // 设置下一关的参数
         currentStageNo++
         enemyCount += 3 // 敌方数量增加
@@ -135,7 +137,7 @@ object StageManager {
     private fun onMissionFailed() {
         RecordManager.saveStageRecord(
             currentStageNo,
-            startMillis, System.currentTimeMillis(),
+            stageStartMillis, System.currentTimeMillis(),
             listRecord
         )
         currentStageNo = 1
@@ -145,12 +147,12 @@ object StageManager {
 
     private fun onPlaying() {
         actionMotion()
-        val endMillis = System.currentTimeMillis() - startMillis
+        val endMillis = System.currentTimeMillis() - stageStartMillis
         LiveEventBus.get(AppGobal.EVENT_CURRENT_TIME).post(endMillis)
     }
 
     private fun onReady() {
-        startMillis = System.currentTimeMillis()
+        stageStartMillis = System.currentTimeMillis()
         LiveEventBus.get(AppGobal.EVENT_STAGE_NO).post(currentStageNo)
         LiveEventBus.get(AppGobal.EVENT_FASTEST_TIME).post(true)
     }
@@ -192,7 +194,7 @@ object StageManager {
                 Player.shotDown()
             }
             // 判断当前对象是否可以向玩家发射子弹
-            if (it is Enemy2) {
+            if (it is Enemy2 && enableEnemyAttack) {
                 it.sendBullet()
             }
         }
@@ -207,10 +209,10 @@ object StageManager {
      */
     @Synchronized
     private fun addEnemy() {
-        if ((System.currentTimeMillis() - startMillis) < 1000) return
+        if ((System.currentTimeMillis() - stageStartMillis) < 1000) return
         if (listEnemy.size < enemyCount) {
             initEnemy(enemyHP, if (listEnemy.size % 5 == 0) 1 else 0)
-            startMillis = System.currentTimeMillis()
+            stageStartMillis = System.currentTimeMillis()
         }
     }
 

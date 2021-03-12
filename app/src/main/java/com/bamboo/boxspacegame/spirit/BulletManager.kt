@@ -88,11 +88,11 @@ object BulletManager {
     }
 
     fun sendTargetEnemy(x: Float, y: Float, angle: Float) {
-        obtain().sendTargetEnmey(x, y, angle, 3f)
+        obtain().sendTargetEnmey(x, y, angle)
     }
 
     fun sendTargetPlayer(x: Float, y: Float, angle: Float) {
-        obtain().sendTargetPlayer(x, y, angle, 30f)
+        obtain().sendTargetPlayer(x, y, angle)
     }
 
     fun draw(canvas: Canvas) {

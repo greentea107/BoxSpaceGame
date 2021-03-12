@@ -128,11 +128,15 @@ class EntranceActivity : AppCompatActivity() {
         switchSFX.setOnClickListener {
             MyApp.saveSoundOption(MyApp.isPlayBGM(), switchSFX.isChecked)
         }
+        switchEnemyAttack.setOnClickListener {
+            MyApp.saveEnableEnemyAttack(switchEnemyAttack.isChecked)
+        }
         lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
                 switchBGM.isChecked = MyApp.isPlayBGM()
                 switchSFX.isChecked = MyApp.isPlaySFX()
+                switchEnemyAttack.isChecked = MyApp.isEnableEnemyAttack()
             }
         })
     }
