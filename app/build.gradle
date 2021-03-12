@@ -12,8 +12,8 @@ android {
         applicationId "com.bamboo.boxspacegame"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 135
-        versionName "1.3.5"
+        versionCode 136
+        versionName "1.3.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
+}
+repositories {
+    flatDir {
+        dirs 'libs'   // jar目录
+    }
 }
 
 dependencies {
@@ -56,4 +60,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.tencent.bugly:crashreport:latest.release'
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation files('libs/pgy_analytics_sdk.jar')
 }
