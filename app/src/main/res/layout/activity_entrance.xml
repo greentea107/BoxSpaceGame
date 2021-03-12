@@ -187,6 +187,15 @@
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchFPS"
+                style="@style/text_14_cyan"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="显示FPS"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/track" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

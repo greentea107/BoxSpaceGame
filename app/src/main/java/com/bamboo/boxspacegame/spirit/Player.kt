@@ -215,7 +215,7 @@ object Player : BaseSprite() {
     }
 
     /**
-     * 发射爆雷
+     * 爆雷 - 必须在能量全满时才能使用
      */
     fun sendBomb() {
         if (AppGobal.pause) return
@@ -225,15 +225,13 @@ object Player : BaseSprite() {
         // 隐藏玩家后播放闪避动画，然后播放爆雷动画并清敌，最后再显示玩家
         isShow = false
         EffectManager.obtainFlash().play(x, y, false) {
-            EffectManager.obtainGrenade().play(
-                x + (size.width / 2),
-                y + (size.height / 2)
-            ) {
-                EffectManager.obtainFlash().play(x, y) {
-                    isShow = true
-                }
+            val centerX = x + (size.width / 2)
+            val centerY = y + (size.height / 2)
+            EffectManager.obtainGrenade().play(centerX, centerY) {
+                EffectManager.obtainFlash().play(x, y) { isShow = true }
             }
-            StageManager.clearAllEnemy() // 清敌
+            StageManager.clearAllEnemy() // 全屏清敌
+            BulletManager.clearAll() // 清除全部的子弹
         }
     }
 

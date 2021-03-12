@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.core.content.edit
 import com.jeremyliao.liveeventbus.LiveEventBus
 import com.pgyer.pgyersdk.PgyerSDKManager
 import com.pgyer.pgyersdk.pgyerenum.FeatureEnum
@@ -18,38 +17,6 @@ class MyApp : Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         var context: Context? = null
-
-        /**
-         * 保存音频选项
-         */
-        fun saveSoundOption(isPlayBGM: Boolean, isPlaySFX: Boolean) {
-            context?.getSharedPreferences("audio", Context.MODE_PRIVATE)
-                ?.edit {
-                    this.putBoolean("bgm", isPlayBGM)
-                    this.putBoolean("sfx", isPlaySFX)
-                }
-        }
-
-        fun isPlayBGM() = context?.getSharedPreferences("audio", Context.MODE_PRIVATE)
-            ?.getBoolean("bgm", true)
-            ?: true
-
-        fun isPlaySFX() = context?.getSharedPreferences("audio", Context.MODE_PRIVATE)
-            ?.getBoolean("sfx", true)
-            ?: true
-
-        /**
-         * 是否允许敌人开火
-         */
-        fun saveEnableEnemyAttack(isEnable: Boolean) {
-            context?.getSharedPreferences("enemy_attack", Context.MODE_PRIVATE)
-                ?.edit { this.putBoolean("enable_attack", isEnable) }
-        }
-
-        fun isEnableEnemyAttack() =
-            context?.getSharedPreferences("enemy_attack", Context.MODE_PRIVATE)
-                ?.getBoolean("enable_attack", false)
-                ?: true
     }
 
     override fun onCreate() {

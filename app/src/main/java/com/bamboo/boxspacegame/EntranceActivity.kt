@@ -3,7 +3,6 @@ package com.bamboo.boxspacegame
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bamboo.boxspacegame.record.RecordBean
 import com.bamboo.boxspacegame.record.RecordManager
-import com.bamboo.boxspacegame.spirit.Player
-import com.bamboo.boxspacegame.utils.LogEx
 import kotlinx.android.synthetic.main.activity_entrance.*
 import kotlinx.android.synthetic.main.item_record.view.*
 
@@ -123,20 +120,26 @@ class EntranceActivity : AppCompatActivity() {
 
     private fun initOptionAudio() {
         switchBGM.setOnClickListener {
-            MyApp.saveSoundOption(switchBGM.isChecked, MyApp.isPlaySFX())
+            val isPlaySFX = OptionHelper.isPlaySFX(this)
+            OptionHelper.saveSoundOption(this, switchBGM.isChecked, isPlaySFX)
         }
         switchSFX.setOnClickListener {
-            MyApp.saveSoundOption(MyApp.isPlayBGM(), switchSFX.isChecked)
+            val isPlayBGM = OptionHelper.isPlayBGM(this)
+            OptionHelper.saveSoundOption(this, isPlayBGM, switchSFX.isChecked)
+        }
+        switchFPS.setOnClickListener {
+            OptionHelper.saveShowFPS(this, switchFPS.isChecked)
         }
         switchEnemyAttack.setOnClickListener {
-            MyApp.saveEnableEnemyAttack(switchEnemyAttack.isChecked)
+            OptionHelper.saveEnableEnemyAttack(this, switchEnemyAttack.isChecked)
         }
         lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                switchBGM.isChecked = MyApp.isPlayBGM()
-                switchSFX.isChecked = MyApp.isPlaySFX()
-                switchEnemyAttack.isChecked = MyApp.isEnableEnemyAttack()
+                switchBGM.isChecked = OptionHelper.isPlayBGM(applicationContext)
+                switchSFX.isChecked = OptionHelper.isPlaySFX(applicationContext)
+                switchEnemyAttack.isChecked = OptionHelper.isEnableEnemyAttack(applicationContext)
+                switchFPS.isChecked = OptionHelper.isShowFPS(applicationContext)
             }
         })
     }

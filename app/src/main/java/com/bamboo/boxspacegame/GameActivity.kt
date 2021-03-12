@@ -18,7 +18,6 @@ import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
-import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -63,7 +62,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onResume() {
         super.onResume()
-        if (MyApp.isPlayBGM()) playBGM()
+        if (OptionHelper.isPlayBGM(applicationContext)) playBGM()
     }
 
     private fun initEventBus() {
@@ -91,8 +90,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         initFireButton()
         initBombButton()
         initJumpButton()
-//        initBGMButton()
-//        initSFXButton()
         progressBarPower.max = AppGobal.POWER_MAX
         progressBarPower.progress = 0
     }
@@ -145,21 +142,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         btnJump.setOnClickListener { Player.jump() }
     }
 
-//    private fun initBGMButton() {
-//        chkBGM.isChecked = MyApp.isPlayBGM()
-//        chkBGM.text = if (chkBGM.isChecked) "音乐：开" else "音乐：关"
-//        chkBGM.setOnCheckedChangeListener { _, isChecked ->
-//            if (!isChecked) {
-//                stopBGM()
-//                chkBGM.text = "音乐：关"
-//            } else {
-//                playBGM()
-//                chkBGM.text = "音乐：开"
-//            }
-//            MyApp.saveSoundOption(isChecked, MyApp.isPlaySFX())
-//        }
-//    }
-
     private fun playBGM() {
         if (mediaPlayer == null) initMediaPlayer()
         mediaPlayer?.start()
@@ -169,15 +151,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         mediaPlayer?.stop()
         mediaPlayer = null
     }
-
-//    private fun initSFXButton() {
-//        chkSFX.isChecked = MyApp.isPlaySFX()
-//        chkSFX.text = if (chkSFX.isChecked) "音效：开" else "音效：关"
-//        chkSFX.setOnCheckedChangeListener { _, isChecked ->
-//            chkSFX.text = if (isChecked) "音效：开" else "音效：关"
-//            MyApp.saveSoundOption(MyApp.isPlayBGM(), isChecked)
-//        }
-//    }
 
     /**
      * 初始化背景音乐
@@ -196,18 +169,21 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         mapSound.put(1, soundPool.load(this, R.raw.bomb_sfx, 1))
         mapSound.put(2, soundPool.load(this, R.raw.bullet_sfx, 1))
         mapSound.put(3, soundPool.load(this, R.raw.flash_sfx, 1))
-        LiveEventBus.get(AppGobal.EVENT_BOMB_SFX, Boolean::class.java).observe(this) {
-            if (MyApp.isPlaySFX())
-                soundPool.play(mapSound[1], 1f, 1f, 0, 0, 1f)
-        }
-        LiveEventBus.get(AppGobal.EVENT_BULLET_SFX, Boolean::class.java).observe(this) {
-            if (MyApp.isPlaySFX())
-                soundPool.play(mapSound[2], 1f, 1f, 0, 0, 1f)
-        }
-        LiveEventBus.get(AppGobal.EVENT_FLASH_SFX, Boolean::class.java).observe(this) {
-            if (MyApp.isPlaySFX())
-                soundPool.play(mapSound[3], 1f, 1f, 0, 0, 1f)
-        }
+        LiveEventBus.get(AppGobal.EVENT_BOMB_SFX, Boolean::class.java)
+            .observe(this) {
+                if (OptionHelper.isPlaySFX(applicationContext))
+                    soundPool.play(mapSound[1], 1f, 1f, 0, 0, 1f)
+            }
+        LiveEventBus.get(AppGobal.EVENT_BULLET_SFX, Boolean::class.java)
+            .observe(this) {
+                if (OptionHelper.isPlaySFX(applicationContext))
+                    soundPool.play(mapSound[2], 1f, 1f, 0, 0, 1f)
+            }
+        LiveEventBus.get(AppGobal.EVENT_FLASH_SFX, Boolean::class.java)
+            .observe(this) {
+                if (OptionHelper.isPlaySFX(applicationContext))
+                    soundPool.play(mapSound[3], 1f, 1f, 0, 0, 1f)
+            }
     }
 
     /**
@@ -271,7 +247,10 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         GrenadeEffect.init()
                         BulletManager.init(this@GameActivity)
                         Player.initScope(this@GameActivity)
-                        StageManager.init(this@GameActivity,MyApp.isEnableEnemyAttack())
+                        StageManager.init(
+                            this@GameActivity,
+                            OptionHelper.isEnableEnemyAttack(applicationContext)
+                        )
                         while (AppGobal.isRunning) {
                             val canvas = holder.lockCanvas()
                             val startMillis = System.currentTimeMillis()
@@ -280,6 +259,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                             BulletManager.draw(canvas)
                             EffectManager.draw(canvas)
                             Player.draw(canvas)
+                            // 是否需要显示FPS
+                            if (OptionHelper.isShowFPS(this@GameActivity))
+                                drawFPS(canvas, startMillis, System.currentTimeMillis())
                             holder.unlockCanvasAndPost(canvas)
                         }
                     }
@@ -296,16 +278,16 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    private fun dp2px(dp: Float): Float {
+        return MyApp.context?.let {
+            dp * it.resources.displayMetrics.density + 0.5f
+        } ?: 0f
+    }
+
     /**
      * 绘制主标题和子标题，屏幕居中
      */
-    fun drawTitleString(canvas: Canvas, subTitle: String) {
-        fun dp2px(dp: Float): Float {
-            return MyApp.context?.let {
-                dp * it.resources.displayMetrics.density + 0.5f
-            } ?: 0f
-        }
-
+    private fun drawTitleString(canvas: Canvas, subTitle: String) {
         // 绘制主标题文字，屏幕居中偏上
         val title = "Space Battle"
         val rectTitle = Rect()
@@ -337,5 +319,16 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         val subTitleX = (AppGobal.screenWidth - rectSubTitle.width()) / 2f
         val subTitleY = AppGobal.screenHeight / 2f + dp2px(30f)
         canvas.drawText(subTitle, subTitleX, subTitleY, paintSubTitle)
+    }
+
+    private val paintFPS = Paint()
+    private fun drawFPS(canvas: Canvas, startMillis: Long, endMillis: Long) {
+        paintFPS.let {
+            it.color = Color.WHITE
+            it.style = Paint.Style.FILL
+            it.textSize = dp2px(14f)
+        }
+        val fps = 1000 / (endMillis - startMillis)
+        canvas.drawText("FPS:$fps", 10f, dp2px(20f), paintFPS)
     }
 }
