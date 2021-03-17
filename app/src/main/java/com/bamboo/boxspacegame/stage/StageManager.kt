@@ -45,7 +45,7 @@ object StageManager {
         scope.launch(Dispatchers.Default) {
             setEnemyData(enemyCount, enemyHP)
             setPlayerLocation()
-            while (AppGobal.isRunning) {
+            while (AppGobal.isLooping) {
                 if (AppGobal.pause) continue
                 when (gameStatus) {
                     STATE_READY -> { // 准备阶段

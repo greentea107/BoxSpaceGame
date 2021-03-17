@@ -29,6 +29,7 @@ object MapBackground {
      */
     private fun drawMapLine(canvas: Canvas) {
         val paint = Paint()
+        paint.isAntiAlias = true
         paint.style = Paint.Style.STROKE
         paint.color = Color.WHITE
         paint.strokeWidth = 1f

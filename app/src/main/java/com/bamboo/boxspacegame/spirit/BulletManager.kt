@@ -19,7 +19,7 @@ object BulletManager {
         buildBitmapPlayer()
         buildBitmapEnemy()
         scope.launch(Dispatchers.Default) {
-            while (AppGobal.isRunning) {
+            while (AppGobal.isLooping) {
                 if (AppGobal.pause) continue
                 listBullet.filter { !it.free }.forEach { it.move() }
                 delay(3)

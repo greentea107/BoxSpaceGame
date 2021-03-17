@@ -32,7 +32,6 @@ class Enemy2 : Enemy() {
             Bitmap.Config.ARGB_8888
         )
         Canvas(bmp).apply {
-            val paint = Paint()
             val path = Path()
             path.moveTo(AppGobal.unitSize / 2, 0f)
             path.lineTo(AppGobal.unitSize, AppGobal.unitSize - AppGobal.unitSize / 3)
@@ -44,6 +43,8 @@ class Enemy2 : Enemy() {
             path.lineTo(AppGobal.unitSize / 3, AppGobal.unitSize - AppGobal.unitSize / 3)
             path.lineTo(0f, AppGobal.unitSize - AppGobal.unitSize / 3)
             path.close()
+            val paint = Paint()
+            paint.isAntiAlias = true
             paint.style = Paint.Style.FILL_AND_STROKE
             paint.shader = RadialGradient(
                 AppGobal.unitSize / 2f,

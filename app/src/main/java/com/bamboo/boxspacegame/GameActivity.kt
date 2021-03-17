@@ -11,8 +11,10 @@ import android.os.*
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bamboo.boxspacegame.effect.*
 import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
@@ -46,7 +48,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        AppGobal.isRunning = false
+        AppGobal.isLooping = false
     }
 
     override fun onDestroy() {
@@ -118,6 +120,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 MotionEvent.ACTION_POINTER_DOWN -> {
                     Player.lockAngle()
                     Player.sendBullet(true)
+                    btnFire.setTextColor(ContextCompat.getColor(this,R.color.text_btn_color))
                     btnFire.setBackgroundResource(R.drawable.shape_pressed_true)
                 }
 
@@ -125,6 +128,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 MotionEvent.ACTION_CANCEL -> {
                     Player.unlockAngle()
                     Player.sendBullet(false)
+                    btnFire.setTextColor(ContextCompat.getColor(this,R.color.text_btn_color))
                     btnFire.setBackgroundResource(R.drawable.shape_pressed_false)
                 }
             }
@@ -236,22 +240,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     height: Int
                 ) {
                     launch(Dispatchers.Default) {
-                        val canvas = holder.lockCanvas()
-                        drawTitleString(canvas, "游戏加载中...")
-                        holder.unlockCanvasAndPost(canvas)
-
-                        MapBackground.init()
-                        BulletEffect.init()
-                        FlashEffect.init()
-                        BombEffect.init()
-                        GrenadeEffect.init()
-                        BulletManager.init(this@GameActivity)
-                        Player.initScope(this@GameActivity)
-                        StageManager.init(
-                            this@GameActivity,
-                            OptionHelper.isEnableEnemyAttack(applicationContext)
-                        )
-                        while (AppGobal.isRunning) {
+                        while (AppGobal.isLooping) {
                             val canvas = holder.lockCanvas()
                             val startMillis = System.currentTimeMillis()
                             MapBackground.draw(canvas)
@@ -268,11 +257,26 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 }
 
                 override fun surfaceCreated(holder: SurfaceHolder) {
-                    AppGobal.isRunning = true
+                    AppGobal.isLooping = true
+                    val canvas = holder.lockCanvas()
+                    drawTitleString(canvas, "游戏加载中...")
+                    holder.unlockCanvasAndPost(canvas)
+
+                    MapBackground.init()
+                    BulletEffect.init()
+                    FlashEffect.init()
+                    BombEffect.init()
+                    GrenadeEffect.init()
+                    BulletManager.init(this@GameActivity)
+                    Player.initScope(this@GameActivity)
+                    StageManager.init(
+                        this@GameActivity,
+                        OptionHelper.isEnableEnemyAttack(applicationContext)
+                    )
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {
-                    AppGobal.isRunning = false
+                    AppGobal.isLooping = false
                 }
             })
         }

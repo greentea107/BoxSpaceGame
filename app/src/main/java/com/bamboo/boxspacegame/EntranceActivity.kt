@@ -38,17 +38,18 @@ class EntranceActivity : AppCompatActivity() {
             val bmp = Bitmap.createBitmap(ivLogo.width, ivLogo.height, Bitmap.Config.ARGB_8888)
             Canvas(bmp).apply {
                 val paint = Paint()
+                paint.isAntiAlias = true
                 paint.color = Color.WHITE
                 paint.shader = RadialGradient(
-                    bmp.width / 2f, 0f, bmp.height.toFloat(),
+                    bmp.width / 2f, 0f, bmp.height * 1f,
                     intArrayOf(Color.WHITE, Color.DKGRAY), null,
                     Shader.TileMode.CLAMP
                 )
                 val path = Path()
                 path.moveTo(bmp.width / 2f, 0f)
-                path.lineTo(bmp.width.toFloat(), (bmp.height - (bmp.height / 3)).toFloat())
-                path.lineTo(bmp.width / 2f, bmp.height.toFloat())
-                path.lineTo(0f, (bmp.height - (bmp.height / 3)).toFloat())
+                path.lineTo(bmp.width * 1f, bmp.height - (bmp.height / 3f))
+                path.lineTo(bmp.width / 2f, bmp.height * 1f)
+                path.lineTo(0f, bmp.height - (bmp.height / 3f))
                 path.close()
                 this.drawPath(path, paint)
                 paint.style = Paint.Style.STROKE

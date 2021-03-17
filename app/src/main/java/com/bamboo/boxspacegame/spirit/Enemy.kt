@@ -11,7 +11,6 @@ import java.util.*
 open class Enemy : BaseSprite() {
     private var bmpEnemy: Bitmap? = null
     private val paint = Paint()
-//    protected var score = 1
 
     init {
         this.distance = 3f
@@ -44,6 +43,7 @@ open class Enemy : BaseSprite() {
             path.lineTo(0f, AppGobal.unitSize - AppGobal.unitSize / 3)
             path.close()
             val paint = Paint()
+            paint.isAntiAlias = true
             paint.style = Paint.Style.FILL_AND_STROKE
             paint.shader = RadialGradient(
                 AppGobal.unitSize / 2f,
