@@ -4,6 +4,7 @@ import android.graphics.*
 import android.util.SizeF
 import androidx.core.graphics.withRotation
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
@@ -97,14 +98,14 @@ object Player : BaseSprite() {
             this.drawPath(path, paint)
             this.drawLine(size.width / 2, 0f, size.width / 2, size.height, paint)
         }
-        AppGobal.bmpCache.put(AppGobal.BMP_PLAYER, bmp)
+        BmpCache.put(BmpCache.BMP_PLAYER, bmp)
     }
 
     /**
      * 从缓存中取出玩家的Bitmap并绘制在屏幕上
      */
     override fun draw(canvas: Canvas) {
-        val bmp = AppGobal.bmpCache[AppGobal.BMP_PLAYER]
+        val bmp = BmpCache.get(BmpCache.BMP_PLAYER)
         if (bmp == null || bmp.width == 0) buildBmp()
         bmp?.let {
             canvas.withRotation(

@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 
 /**
  * 瞬移的动画特效
@@ -52,14 +53,14 @@ class FlashEffect : BaseEffect() {
                     )
                     this.drawOval(unit - 1, unit - 6, unit + 1, unit + 6, paint)
                 }
-                AppGobal.bmpCache.put(AppGobal.BMP_FLASH + "_$it", bmp)
+                BmpCache.put(BmpCache.BMP_FLASH + "_$it", bmp)
             }
         }
     }
 
     override fun draw(canvas: Canvas) {
-        val bmp = AppGobal.bmpCache[AppGobal.BMP_FLASH + "_$currentFrame"]
-        canvas.drawBitmap(bmp, x, y, null)
+        val bmp = BmpCache.get(BmpCache.BMP_FLASH + "_$currentFrame")
+        bmp?.let { canvas.drawBitmap(it, x, y, null) }
         if (isInvert) {
             currentFrame--
             if (currentFrame < 0) {

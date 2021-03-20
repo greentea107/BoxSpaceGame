@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.bamboo.boxspacegame.utils.LogEx
 import kotlin.random.Random
 
@@ -37,7 +38,7 @@ class BulletEffect : BaseEffect() {
                     )
                     this.drawCircle(unit, unit, AppGobal.unitSize / 4f, paint)
                 }
-                AppGobal.bmpCache.put("bulletEffect_$it", bmp)
+                BmpCache.put("bulletEffect_$it", bmp)
             }
         }
     }
@@ -46,10 +47,10 @@ class BulletEffect : BaseEffect() {
      * 根据当前帧的编号绘制动画
      */
     override fun draw(canvas: Canvas) {
-        val bmp = AppGobal.bmpCache["bulletEffect_$currentFrame"]
+        val bmp = BmpCache.get("bulletEffect_$currentFrame")
         val ex = x - AppGobal.unitSize / 2
         val ey = y - AppGobal.unitSize / 2
-        canvas.drawBitmap(bmp, ex, ey, null)
+        bmp?.let { canvas.drawBitmap(it, ex, ey, null) }
         currentFrame++
         if (currentFrame >= FRAME_COUNT) {
             currentFrame = 0

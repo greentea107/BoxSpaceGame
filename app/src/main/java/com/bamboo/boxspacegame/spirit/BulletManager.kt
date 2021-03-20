@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.spirit
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -48,7 +49,7 @@ object BulletManager {
             )
             this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
         }
-        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_PLAYER, bmp)
+        BmpCache.put(BmpCache.BMP_BULLET_PLAYER, bmp)
     }
 
     /**
@@ -72,7 +73,7 @@ object BulletManager {
             )
             this.drawCircle(size / 2f, size / 2f, size / 2f, paint)
         }
-        AppGobal.bmpCache.put(AppGobal.BMP_BULLET_ENEMY, bmp)
+        BmpCache.put(BmpCache.BMP_BULLET_ENEMY, bmp)
     }
 
     /**

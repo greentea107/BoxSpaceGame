@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.spirit
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.stage.StageManager
 import com.bamboo.boxspacegame.utils.MathUtils
@@ -75,9 +76,11 @@ class Bullet : BaseSprite() {
 
     override fun draw(canvas: Canvas) {
         val keyBmp = if (target == AppGobal.TARGET_PLAYER)
-            AppGobal.BMP_BULLET_ENEMY else AppGobal.BMP_BULLET_PLAYER
-        val bmp = AppGobal.bmpCache[keyBmp]
-        canvas.drawBitmap(bmp, x - bmp.width / 2, y - bmp.height / 2, null)
+            BmpCache.BMP_BULLET_ENEMY else BmpCache.BMP_BULLET_PLAYER
+        val bmp = BmpCache.get(keyBmp)
+        bmp?.let {
+            canvas.drawBitmap(it, x - bmp.width / 2, y - bmp.height / 2, null)
+        }
     }
 
     /**

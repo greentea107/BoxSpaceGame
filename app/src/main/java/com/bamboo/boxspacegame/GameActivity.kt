@@ -20,11 +20,14 @@ import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
+import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.internal.synchronized
+import java.lang.Exception
 
 class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var soundPool: SoundPool
@@ -120,7 +123,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 MotionEvent.ACTION_POINTER_DOWN -> {
                     Player.lockAngle()
                     Player.sendBullet(true)
-                    btnFire.setTextColor(ContextCompat.getColor(this,R.color.text_btn_color))
+                    btnFire.setTextColor(ContextCompat.getColor(this, R.color.text_btn_color))
                     btnFire.setBackgroundResource(R.drawable.shape_pressed_true)
                 }
 
@@ -128,7 +131,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 MotionEvent.ACTION_CANCEL -> {
                     Player.unlockAngle()
                     Player.sendBullet(false)
-                    btnFire.setTextColor(ContextCompat.getColor(this,R.color.text_btn_color))
+                    btnFire.setTextColor(ContextCompat.getColor(this, R.color.text_btn_color))
                     btnFire.setBackgroundResource(R.drawable.shape_pressed_false)
                 }
             }
@@ -242,14 +245,16 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     launch(Dispatchers.Default) {
                         while (AppGobal.isLooping) {
                             val canvas = holder.lockCanvas()
+                            // 记录帧开始的时间
                             val startMillis = System.currentTimeMillis()
-                            MapBackground.draw(canvas)
-                            StageManager.draw(canvas)
-                            BulletManager.draw(canvas)
-                            EffectManager.draw(canvas)
-                            Player.draw(canvas)
+                            drawFrame(canvas)
+                            // 记录帧结束的时间
+                            val endMillis = System.currentTimeMillis()
+                            // 使画面保持在每秒60帧以内
+                            val frameDelay = 1000 / 60 - (endMillis - startMillis)
+                            withContext(Dispatchers.Default) { delay(frameDelay) }
                             // 是否需要显示FPS
-                            if (OptionHelper.isShowFPS(this@GameActivity))
+                            if (OptionHelper.isShowFPS(applicationContext))
                                 drawFPS(canvas, startMillis, System.currentTimeMillis())
                             holder.unlockCanvasAndPost(canvas)
                         }
@@ -280,6 +285,14 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 }
             })
         }
+    }
+
+    private fun drawFrame(canvas: Canvas) {
+        MapBackground.draw(canvas)
+        StageManager.draw(canvas)
+        BulletManager.draw(canvas)
+        EffectManager.draw(canvas)
+        Player.draw(canvas)
     }
 
     private fun dp2px(dp: Float): Float {

@@ -3,6 +3,7 @@ package com.bamboo.boxspacegame.effect
 import android.graphics.*
 import android.util.SizeF
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.jeremyliao.liveeventbus.LiveEventBus
 import java.util.*
 
@@ -60,7 +61,7 @@ class BombEffect : BaseEffect() {
                     }
                 }
                 // 对绘制的碎片对象进行缓存
-                AppGobal.bmpCache.put("${AppGobal.BMP_BOMB}_$it", bmp)
+                BmpCache.put("${BmpCache.BMP_BOMB}_$it", bmp)
             }
         }
     }
@@ -68,7 +69,7 @@ class BombEffect : BaseEffect() {
     init {
         // 对象在实例化时会随机的从缓存中取出碎片Bitmap
         val styleIndex = Random().nextInt(BOMB_STYLE_COUNT)
-        bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
+        bmp = BmpCache.get("${BmpCache.BMP_BOMB}_$styleIndex")
         paint.color = Color.WHITE
         paint.strokeWidth = 2f
         paint.style = Paint.Style.FILL_AND_STROKE
@@ -102,7 +103,7 @@ class BombEffect : BaseEffect() {
             free = true // 标记为空闲
             // 重新从缓存中随机取出一张碎片Bitmap
             val styleIndex = Random().nextInt(BOMB_STYLE_COUNT)
-            bmp = AppGobal.bmpCache["${AppGobal.BMP_BOMB}_$styleIndex"]
+            bmp = BmpCache.get("${BmpCache.BMP_BOMB}_$styleIndex")
             onFinished?.let { it() } // 调用完毕后的响应方法
         } else {
             // 绘制冲击波效果

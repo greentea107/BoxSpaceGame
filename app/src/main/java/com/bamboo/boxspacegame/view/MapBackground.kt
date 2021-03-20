@@ -1,14 +1,14 @@
 package com.bamboo.boxspacegame.view
 
 import android.graphics.*
-import androidx.core.graphics.alpha
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.bamboo.boxspacegame.spirit.Player
 
 object MapBackground {
     fun init() {
         val bmp = buildBmp()
-        AppGobal.bmpCache.put("background", bmp)
+        BmpCache.put(BmpCache.BMP_BACKGROUND, bmp)
     }
 
     private fun buildBmp(): Bitmap {
@@ -98,8 +98,8 @@ object MapBackground {
      * 在主循环绘制背景BITMAP
      */
     fun draw(canvas: Canvas) {
-        val bg = AppGobal.bmpCache["background"]
-        bg?.let { canvas.drawBitmap(it, 0f, 0f, null) }
+        val bmp = BmpCache.get(BmpCache.BMP_BACKGROUND)
+        bmp?.let { canvas.drawBitmap(it, 0f, 0f, null) }
         drawMapGrid(canvas)
     }
 

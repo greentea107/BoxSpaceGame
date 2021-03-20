@@ -2,6 +2,7 @@ package com.bamboo.boxspacegame.effect
 
 import android.graphics.*
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 
 /**
  *  爆雷：全屏清敌
@@ -36,7 +37,7 @@ class GrenadeEffect : BaseEffect() {
                         paint
                     )
                 }
-                AppGobal.bmpCache.put(AppGobal.BMP_GRENADE + "_$it", bmp)
+                BmpCache.put(BmpCache.BMP_GRENADE + "_$it", bmp)
             }
         }
     }
@@ -69,10 +70,12 @@ class GrenadeEffect : BaseEffect() {
                 ), null, Shader.TileMode.CLAMP
             )
             canvas.drawCircle(centerX, centerY, r.toFloat(), paint)
-            val bmp = AppGobal.bmpCache[AppGobal.BMP_GRENADE+"_$currentFrame"]
-            val cx = centerX - (bmp.width / 2)
-            val cy = centerY - (bmp.height / 2)
-            canvas.drawBitmap(bmp, cx, cy, null)
+            val bmp = BmpCache.get(BmpCache.BMP_GRENADE + "_$currentFrame")
+            bmp?.let {
+                val cx = centerX - (it.width / 2)
+                val cy = centerY - (it.height / 2)
+                canvas.drawBitmap(it, cx, cy, null)
+            }
         }
     }
 

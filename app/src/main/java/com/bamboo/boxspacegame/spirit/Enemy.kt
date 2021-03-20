@@ -3,6 +3,7 @@ package com.bamboo.boxspacegame.spirit
 import android.graphics.*
 import androidx.core.graphics.withRotation
 import com.bamboo.boxspacegame.AppGobal
+import com.bamboo.boxspacegame.BmpCache
 import com.bamboo.boxspacegame.effect.EffectManager
 import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -16,7 +17,7 @@ open class Enemy : BaseSprite() {
         this.distance = 3f
         this.HP = 10f
         this.isShow = false
-        bmpEnemy = AppGobal.bmpCache[AppGobal.BMP_ENEMY]
+        bmpEnemy = BmpCache.get(BmpCache.BMP_ENEMY)
         if (bmpEnemy == null) buildBmp()
     }
 
@@ -81,7 +82,7 @@ open class Enemy : BaseSprite() {
             paint.color = Color.rgb(220, 255, 200)
             this.drawPath(path, paint)
         }
-        AppGobal.bmpCache.put(AppGobal.BMP_ENEMY, bmp)
+        BmpCache.put(BmpCache.BMP_ENEMY, bmp)
         this.bmpEnemy = bmp
     }
 

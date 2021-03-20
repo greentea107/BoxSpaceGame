@@ -4,14 +4,14 @@ import android.graphics.Bitmap
 import android.util.LruCache
 
 object AppGobal {
-    const val BMP_ENEMY = "enemy1"
-    const val BMP_ENEMY_2 = "enemy2"
-    const val BMP_PLAYER = "player"
-    const val BMP_FLASH = "flash"
-    const val BMP_BOMB = "bomb"
-    const val BMP_BULLET_PLAYER = "bulletPlayer" // 玩家发射的子弹
-    const val BMP_BULLET_ENEMY = "bulletEnemy" // 敌人发射的子弹
-    const val BMP_GRENADE = "grenade"
+//    const val BMP_ENEMY = "enemy1"
+//    const val BMP_ENEMY_2 = "enemy2"
+//    const val BMP_PLAYER = "player"
+//    const val BMP_FLASH = "flash"
+//    const val BMP_BOMB = "bomb"
+//    const val BMP_BULLET_PLAYER = "bulletPlayer" // 玩家发射的子弹
+//    const val BMP_BULLET_ENEMY = "bulletEnemy" // 敌人发射的子弹
+//    const val BMP_GRENADE = "grenade"
     const val EVENT_STAGE_NO = "stageNo"
     const val EVENT_FASTEST_TIME = "fastest_time"
     const val EVENT_CURRENT_TIME = "current_time"
@@ -27,6 +27,6 @@ object AppGobal {
     var unitSize = 0f // 基准单位，屏幕上的玩家、敌人、爆炸等物体的大小以此为基准
     var isLooping = true
     var pause = false
-    val bmpCache = LruCache<String, Bitmap>(120)
+//    val bmpCache = LruCache<String, Bitmap>(120)
 
 }
