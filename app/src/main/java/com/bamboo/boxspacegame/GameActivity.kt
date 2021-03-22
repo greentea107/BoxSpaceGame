@@ -248,11 +248,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                             // 记录帧开始的时间
                             val startMillis = System.currentTimeMillis()
                             drawFrame(canvas)
-                            // 记录帧结束的时间
-                            val endMillis = System.currentTimeMillis()
-                            // 使画面保持在每秒60帧以内
-                            val frameDelay = 1000 / 60 - (endMillis - startMillis)
-                            withContext(Dispatchers.Default) { delay(frameDelay) }
                             // 是否需要显示FPS
                             if (OptionHelper.isShowFPS(applicationContext))
                                 drawFPS(canvas, startMillis, System.currentTimeMillis())
@@ -264,8 +259,10 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                     AppGobal.isLooping = true
                     val canvas = holder.lockCanvas()
-                    drawTitleString(canvas, "游戏加载中...")
-                    holder.unlockCanvasAndPost(canvas)
+                    canvas?.let {
+                        drawTitleString(it, "游戏加载中...")
+                        holder.unlockCanvasAndPost(it)
+                    }
 
                     MapBackground.init()
                     BulletEffect.init()

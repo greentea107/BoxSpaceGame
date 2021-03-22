@@ -13,6 +13,7 @@ import com.bamboo.boxspacegame.utils.MathUtils
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.coroutines.*
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * 关卡管理
@@ -28,8 +29,8 @@ object StageManager {
     private var enemyHP = 10f // 初始的敌人的HP量
     private var enableEnemyAttack = true // 是否允许敌人开火
     private var stageStartMillis = 0L // 记录关卡的起始时间
-    private val listRecord = mutableListOf<RecordBean>() // 记录各关的通关时间
-    private val listEnemy = mutableListOf<Enemy>() // 保存各关的敌人
+    private val listRecord = CopyOnWriteArrayList<RecordBean>() // 记录各关的通关时间
+    private val listEnemy = CopyOnWriteArrayList<Enemy>() // 保存各关的敌人
     var gameStatus = STATE_READY // 游戏状态
 
     fun init(scope: CoroutineScope, isEnableEnemyAttack: Boolean) {
