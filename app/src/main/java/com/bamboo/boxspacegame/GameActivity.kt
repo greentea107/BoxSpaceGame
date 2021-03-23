@@ -11,7 +11,6 @@ import android.os.*
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,14 +19,11 @@ import com.bamboo.boxspacegame.record.RecordManager
 import com.bamboo.boxspacegame.spirit.BulletManager
 import com.bamboo.boxspacegame.spirit.Player
 import com.bamboo.boxspacegame.stage.StageManager
-import com.bamboo.boxspacegame.utils.LogEx
 import com.bamboo.boxspacegame.view.CrossRocker
 import com.bamboo.boxspacegame.view.MapBackground
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.internal.synchronized
-import java.lang.Exception
 
 class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var soundPool: SoundPool
@@ -270,7 +266,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     BombEffect.init()
                     GrenadeEffect.init()
                     BulletManager.init(this@GameActivity)
-                    Player.initScope(this@GameActivity)
+                    Player.init(this@GameActivity)
                     StageManager.init(
                         this@GameActivity,
                         OptionHelper.isEnableEnemyAttack(applicationContext)

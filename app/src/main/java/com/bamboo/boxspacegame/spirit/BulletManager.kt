@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * 子弹管理类，以单例模式运行
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
  * 如果子弹击中目标或越界后就将该对象设为空闲，以便于下回使用而不再频繁的创建对象
  */
 object BulletManager {
-    private val listBullet = mutableListOf<Bullet>()
+    private val listBullet = CopyOnWriteArrayList<Bullet>()
 
     fun init(scope: CoroutineScope) {
         buildBitmapPlayer()

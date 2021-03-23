@@ -23,19 +23,20 @@ object Player : BaseSprite() {
     var size = SizeF(0f, 0f) // 玩家的尺寸
     var power = 0 // 能量值
 
-    init {
+    fun initPlayer() {
         this.distance = 3f // 玩家的移动距离
-        // 设置精灵的尺寸为SurfaceView的1/20
-        this.size = SizeF(AppGobal.unitSize, AppGobal.unitSize)
+        this.power = AppGobal.POWER_MAX / 2 // 能量的初始值
         this.angle = 270f // 初始化玩家的角度为12点钟方向
         // 初始位置为屏幕居中
         this.x = (AppGobal.screenWidth - size.width) / 2
         this.y = (AppGobal.screenHeight - size.height) / 2
+        // 设置精灵的尺寸为SurfaceView的1/20
+        this.size = SizeF(AppGobal.unitSize, AppGobal.unitSize)
         buildBmp() // 绘制玩家的图形
     }
 
-    fun initScope(scope: CoroutineScope) {
-        this.power = AppGobal.POWER_MAX / 2 // 能量的初始值
+    fun init(scope: CoroutineScope) {
+        initPlayer()
         // 由于玩家的移动是连续的，所以需要通过循环来实现
         scope.launch(Dispatchers.Default) {
             while (AppGobal.isLooping) {
