@@ -160,54 +160,67 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchBGM"
-                style="@style/text_14_cyan"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:text="音乐"
-                android:thumb="@drawable/thumb"
-                app:track="@drawable/track" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchSFX"
-                style="@style/text_14_cyan"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:text="音效"
-                android:thumb="@drawable/thumb"
-                app:track="@drawable/track" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchEnemyAttack"
-                style="@style/text_14_cyan"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:text="允许敌人开火"
-                android:thumb="@drawable/thumb"
-                app:track="@drawable/track" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchFPS"
-                style="@style/text_14_cyan"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:text="显示FPS"
-                android:thumb="@drawable/thumb"
-                app:track="@drawable/track" />
-
-            <Space
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:fillViewport="true">
 
-            <Button
-                android:id="@+id/btnClearScore"
-                style="@style/text_14_cyan"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@drawable/btn_single_color"
-                android:text="重新计分" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchBGM"
+                        style="@style/text_14_cyan"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:text="音乐"
+                        android:thumb="@drawable/thumb"
+                        app:track="@drawable/track" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchSFX"
+                        style="@style/text_14_cyan"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:text="音效"
+                        android:thumb="@drawable/thumb"
+                        app:track="@drawable/track" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchEnemyAttack"
+                        style="@style/text_14_cyan"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:text="允许敌人开火"
+                        android:thumb="@drawable/thumb"
+                        app:track="@drawable/track" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchFPS"
+                        style="@style/text_14_cyan"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:text="显示FPS"
+                        android:thumb="@drawable/thumb"
+                        app:track="@drawable/track" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/btnClearScore"
+                        style="@style/text_14_cyan"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:background="@drawable/btn_single_color"
+                        android:text="重新计分" />
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
     </LinearLayout>

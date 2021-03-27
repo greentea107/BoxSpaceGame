@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import com.jeremyliao.liveeventbus.LiveEventBus
-import com.pgyer.pgyersdk.PgyerSDKManager
-import com.pgyer.pgyersdk.pgyerenum.FeatureEnum
 import com.tencent.bugly.crashreport.CrashReport
 
 class MyApp : Application() {
@@ -24,11 +22,6 @@ class MyApp : Application() {
         context = applicationContext
 
         CrashReport.initCrashReport(applicationContext, "135384028a", false)
-
-        PgyerSDKManager.InitSdk()
-            .setContext(context)
-            .enable(FeatureEnum.CHECK_UPDATE)  //添加检查新版本
-            .build()
 
         LiveEventBus.config().enableLogger(false).lifecycleObserverAlwaysActive(false)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
