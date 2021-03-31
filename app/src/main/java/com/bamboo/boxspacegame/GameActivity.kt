@@ -229,6 +229,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             AppGobal.screenWidth,
             AppGobal.screenHeight
         )
+        surfaceView.setZOrderOnTop(true)
         surfaceView.holder.let {
             it.setKeepScreenOn(true) // 保存屏幕常亮
             it.addCallback(object : SurfaceHolder.Callback {
@@ -265,8 +266,8 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     FlashEffect.init()
                     BombEffect.init()
                     GrenadeEffect.init()
-                    BulletManager.init(this@GameActivity)
                     Player.init(this@GameActivity)
+                    BulletManager.init(this@GameActivity)
                     StageManager.init(
                         this@GameActivity,
                         OptionHelper.isEnableEnemyAttack(applicationContext)

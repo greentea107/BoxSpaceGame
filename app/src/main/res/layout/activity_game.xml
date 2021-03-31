@@ -156,17 +156,16 @@
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="1"
         android:elevation="10dp" />
-
     <!--  右侧布局  -->
     <LinearLayout
         android:layout_width="wrap_content"
-        android:minWidth="130dp"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:minWidth="130dp"
         android:orientation="vertical"
         android:padding="10dp">
 

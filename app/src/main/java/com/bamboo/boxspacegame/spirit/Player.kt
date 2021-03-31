@@ -23,7 +23,7 @@ object Player : BaseSprite() {
     var size = SizeF(0f, 0f) // 玩家的尺寸
     var power = 0 // 能量值
 
-    fun initPlayer() {
+    private fun initPlayer() {
         this.distance = 3f // 玩家的移动距离
         this.power = AppGobal.POWER_MAX / 2 // 能量的初始值
         this.angle = 270f // 初始化玩家的角度为12点钟方向
